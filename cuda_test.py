@@ -38,6 +38,15 @@ tensor.add_(5)    # This adds five to tensor
 print(tensor)
 
 
+device = (
+    "cuda"
+    if torch.cuda.is_available()
+    else "mps"
+    if torch.backends.mps.is_available()
+    else "cpu"
+)
+print(f"Using {device} device")
+
 
 class NeuralNetwork(nn.Module):
     def __init__(self):
