@@ -1,5 +1,8 @@
+import os
 import torch
-import numpy as np 
+from torch import nn
+from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
 
 data = [[1, 2], [3, 4]]     # Create a normal array of data
 
@@ -33,3 +36,26 @@ print(f"Device tensor is stored on: {tensor.device}")   # Display if the tensor 
 print(f"{tensor} \n")
 tensor.add_(5)    # This adds five to tensor
 print(tensor)
+
+
+
+class NeuralNetwork(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.flatten = nn.Flatten()
+        self.linear_relu_stack = nn.Sequential(
+            nn.Linear(28*28, 512),
+            nn.ReLU(),
+            nn.Linear(512, 512),
+            nn.ReLU(),
+            nn.Linear(512, 10),
+        )
+
+    def forward(self, x):
+        x = self.flatten(x)
+        logits = self.linear_relu_stack(x)
+        return logits
+
+
+model = NeuralNetwork().to(device)
+print(model)
