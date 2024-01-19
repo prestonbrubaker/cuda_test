@@ -29,3 +29,7 @@ print(torch.cuda.is_available())  # Should return True if CUDA is properly insta
 print(torch.cuda.get_device_name(0))  # Should return the name of your CUDA GPU
 
 print(f"Device tensor is stored on: {tensor.device}")   # Display if the tensor is stored on the cpu or gpu
+
+print(f"{tensor} \n")
+tensor.add_(5)    # This adds five to tensor
+print(tensor)
