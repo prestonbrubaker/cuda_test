@@ -21,7 +21,7 @@ print(f"Datatype of tensor: {tensor.dtype}")    # Display the type of data in th
 print(f"Device tensor is stored on: {tensor.device}")   # Display if the tensor is stored on the cpu or gpu
 
 if torch.cuda.is_available():
-    tensor.to("cuda")
+    tensor = tensor.to("cuda")  # Reassign the tensor moved to CUDA
 
 print(f"Device tensor is stored on: {tensor.device}")   # Display if the tensor is stored on the cpu or gpu
 
