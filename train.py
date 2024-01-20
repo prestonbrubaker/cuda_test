@@ -4,7 +4,7 @@ import torch.optim as optim
 import numpy as np
 
 # Generate dataset
-def is_in_mandelbrot(c, max_iter=100):
+def is_in_mandelbrot(c, max_iter=500):
     z = 0
     for i in range(max_iter):
         z = z*z + c
@@ -38,8 +38,8 @@ class MandelbrotNet(nn.Module):
 model = MandelbrotNet()
 
 # Loss and optimizer
-criterion = nn.BCELoss()
-optimizer = optim.Adam(model.parameters(), lr=0.001)
+criterion = nn.MSELoss()
+optimizer = torch.optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
 
 # Training
 epochs = 10000
@@ -56,8 +56,3 @@ for epoch in range(epochs):
 model_save_path = "mandelbrot_net.pth"
 torch.save(model.state_dict(), model_save_path)
 print(f"Model saved to {model_save_path}")
-
-# Testing with a new point
-test_point = torch.tensor([[0.3, 0.5]], dtype=torch.float32)
-prediction = model(test_point).item()
-print(f'Prediction for {test_point}: {"In" if prediction > 0.5 else "Out"} of the Mandelbrot set')
