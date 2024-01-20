@@ -15,7 +15,8 @@ class MandelbrotNet(nn.Module):
     def forward(self, x):
         x = torch.relu(self.fc1(x))
         x = torch.relu(self.fc2(x))
-        return torch.sigmoid(self.fc3(x))
+        x = torch.relu(self.fc3(x))
+        return torch.sigmoid(self.fc4(x))
 
 # Load the trained model
 model = MandelbrotNet()
