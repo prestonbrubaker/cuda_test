@@ -34,12 +34,21 @@ class MandelbrotNet(nn.Module):
         x = torch.relu(self.fc2(x))
         return torch.sigmoid(self.fc3(x))
 
-# Instantiate the model
-model = MandelbrotNet()
+
+# Check for GPU
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(f"Using {device} device")
+
+# Instantiate the model and move it to GPU if available
+model = MandelbrotNet().to(device)
 
 # Loss and optimizer
 criterion = nn.MSELoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
+
+# Move data to GPU
+X = X.to(device)
+y = y.to(device)
 
 # Training
 epochs = 10000
