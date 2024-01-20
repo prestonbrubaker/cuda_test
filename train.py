@@ -37,6 +37,12 @@ class MandelbrotNet(nn.Module):
         self.fc10 = nn.Linear(10, 10)
         self.fc11 = nn.Linear(10, 10)
         self.fc12 = nn.Linear(10, 1)
+        
+        # Initialize layers
+        for m in self.modules():
+            if isinstance(m, nn.Linear):
+                nn.init.kaiming_normal_(m.weight, mode='fan_in', nonlinearity='relu')
+                nn.init.constant_(m.bias, 0.01)
 
     def forward(self, x):
         x = torch.relu(self.fc1(x))
