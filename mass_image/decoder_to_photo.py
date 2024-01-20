@@ -33,19 +33,25 @@ model = Autoencoder()
 model.load_state_dict(torch.load('autoencoder.pth'))
 model.eval()
 
-# Random input for the decoder
-# Adjust the dimensions according to the output size of your encoder
-random_input = torch.randn(1, 5, 58, 58)  
+# Create the directory for decoded photos if it doesn't exist
+os.makedirs('decoded_photos', exist_ok=True)
 
-# Run the decoder
-with torch.no_grad():
-    decoded_image = model.decoder(random_input)
+# Generate and save 50 decoded images
+for i in range(50):
+    # Random input for the decoder
+    random_input = torch.randn(1, 5, 58, 58)  # Adjust as needed
 
-# Convert to PIL Image and save
-decoded_image = decoded_image.squeeze(0).squeeze(0).numpy()  # Remove batch and channel dimensions
-decoded_image = (decoded_image * 255).astype(np.uint8)  # Convert to 8-bit pixel values
-image = Image.fromarray(decoded_image, 'L')
-image = image.resize((256, 256), Image.ANTIALIAS)
-image.save('decoded_image.png')
+    # Run the decoder
+    with torch.no_grad():
+        decoded_image = model.decoder(random_input)
 
-print('Image saved as decoded_image.png')
+    # Convert to PIL Image
+    decoded_image = decoded_image.squeeze(0).squeeze(0).numpy()
+    decoded_image = (decoded_image * 255).astype(np.uint8)
+    image = Image.fromarray(decoded_image, 'L')
+    image = image.resize((256, 256), Image.ANTIALIAS)
+
+    # Save the image
+    image.save(f'decoded_photos/decoded_image_{i+1}.png')
+
+print('50 images saved in decoded_photos folder')
