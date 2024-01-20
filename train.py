@@ -13,7 +13,7 @@ def is_in_mandelbrot(c, max_iter=500):
     return 1  # In the Mandelbrot set
 
 # Creating a dataset
-data_size = 10000  # Number of data points
+data_size = 100000  # Number of data points
 X = np.random.uniform(-2, 2, (data_size, 2))  # Generate random pairs
 y = np.array([is_in_mandelbrot(complex(x[0], x[1])) for x in X])
 
@@ -68,7 +68,7 @@ model = MandelbrotNet().to(device)
 
 # Loss and optimizer
 #criterion = nn.MSELoss()
-optimizer = torch.optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+optimizer = torch.optim.SGD(model.parameters(), lr=0.03, momentum=0.9)
 
 criterion = nn.BCELoss()
 #optimizer = optim.Adam(model.parameters(), lr=0.0001)
