@@ -35,7 +35,7 @@ model.eval()
 
 # Random input for the decoder
 # Assuming the compressed size is 64 feature maps of 64x64 (as in the defined model)
-random_input = torch.randn(1, 5, 64, 64)  # Batch size, Channels, Height, Width
+random_input = torch.randn(1, 5, 5, 5)  # Batch size, Channels, Height, Width
 
 # Run the decoder
 with torch.no_grad():
