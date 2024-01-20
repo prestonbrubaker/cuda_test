@@ -42,4 +42,4 @@ def generate_random_image(max_iter, num_images):
             print(f"Image Skipped: Black {black_percentage*100:.2f}%, White {white_percentage*100:.2f}%")
 
 # Example usage
-generate_random_image(300, 10)
+generate_random_image(300, 1000000)
