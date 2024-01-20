@@ -59,7 +59,7 @@ for epoch in range(epochs):
     loss.backward()
     optimizer.step()
     if epoch % 10 == 0:
-        print(f'Epoch [{epoch+1}/{epochs}], Loss: {loss.item():.4f}')
+        print(f'Epoch [{epoch}}], Loss: {loss.item():.6f}')
 
 # Save the model
 model_save_path = "mandelbrot_net.pth"
