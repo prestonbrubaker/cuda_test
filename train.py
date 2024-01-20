@@ -62,6 +62,8 @@ for epoch in range(epochs):
     optimizer.step()
     if epoch % 10 == 0:
         print(f'Epoch {epoch}, Loss: {loss.item():.6f}')
+        with open("loss_values.txt", "a") as file:
+            file.write(str(epoch) + " " + str(loss.item()))
 
 # Save the model
 model_save_path = "mandelbrot_net.pth"
