@@ -6,9 +6,9 @@ def mandelbrot(c, max_iter):
     z = 0
     for n in range(max_iter):
         if abs(z) > 2:
-            return n
+            return 0  # Point is not in the Mandelbrot set
         z = z*z + c
-    return max_iter
+    return 1  # Point is in the Mandelbrot set
 
 def mandelbrot_set(xmin, xmax, ymin, ymax, width, height, max_iter):
     x = np.linspace(xmin, xmax, width)
@@ -29,12 +29,12 @@ def generate_random_image(max_iter, num_images):
         ymin, ymax = center_y - width/2, center_y + width/2
 
         mandelbrot_image = mandelbrot_set(xmin, xmax, ymin, ymax, 256, 256, max_iter)
-        image = Image.fromarray(np.uint8(mandelbrot_image / max_iter * 255), 'L')
+        image = Image.fromarray(np.uint8(mandelbrot_image * 255), 'L')
         
         black_percentage = np.sum(mandelbrot_image == 0) / mandelbrot_image.size
-        white_percentage = np.sum(mandelbrot_image == max_iter) / mandelbrot_image.size
+        white_percentage = np.sum(mandelbrot_image == 1) / mandelbrot_image.size
 
-        if black_percentage >= 0.01 and white_percentage >= 0.01:  # Updated condition
+        if black_percentage >= 0.01 and white_percentage >= 0.01:
             i += 1
             image.save(f"mandelbrot_random_{i}.png")
             print(f"Image {i} Saved Successfully: Black {black_percentage*100:.2f}%, White {white_percentage*100:.2f}%")
