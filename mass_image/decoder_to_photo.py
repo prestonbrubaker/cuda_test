@@ -34,8 +34,8 @@ model.load_state_dict(torch.load('autoencoder.pth'))
 model.eval()
 
 # Random input for the decoder
-# Assuming the compressed size is 64 feature maps of 64x64 (as in the defined model)
-random_input = torch.randn(1, 5, 5, 5)  # Batch size, Channels, Height, Width
+# Adjust the dimensions according to the output size of your encoder
+random_input = torch.randn(1, 5, 58, 58)  
 
 # Run the decoder
 with torch.no_grad():
