@@ -62,10 +62,10 @@ model = Autoencoder().to(device)
 
 # Loss and optimizer
 criterion = nn.MSELoss()
-optimizer = torch.optim.SGD(model.parameters(), lr=0.01, momentum=0.3)
+optimizer = torch.optim.SGD(model.parameters(), lr=0.01, momentum=0.0)
 
 # Train the model
-num_epochs = 3000
+num_epochs = 1000
 for epoch in range(num_epochs):
     for data in dataloader:
         img = data.to(device)
