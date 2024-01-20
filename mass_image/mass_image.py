@@ -20,7 +20,8 @@ def mandelbrot_set(xmin, xmax, ymin, ymax, width, height, max_iter):
     return N
 
 def generate_random_image(max_iter, num_images):
-    for i in range(num_images):
+    i = 0
+    while(i < num_images):
         # Randomly select a region within the bounds
         center_x = random.uniform(-1.5, 0.5)
         center_y = random.uniform(-1, 1)
@@ -33,6 +34,7 @@ def generate_random_image(max_iter, num_images):
         
         # Check if the image is not entirely black or white
         if not np.all(mandelbrot_image == 0) and not np.all(mandelbrot_image == max_iter):
+            i += 1
             image.save(f"mandelbrot_random_{i}.png")
             print("Image " + str(i) + " Saved Successfully!")
 
