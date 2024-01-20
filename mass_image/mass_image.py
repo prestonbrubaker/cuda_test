@@ -34,6 +34,7 @@ def generate_random_image(max_iter, num_images):
         # Check if the image is not entirely black or white
         if not np.all(mandelbrot_image == 0) and not np.all(mandelbrot_image == max_iter):
             image.save(f"mandelbrot_random_{i}.png")
+            print("Image " + str(i) + " Saved Successfully!")
 
 # Example usage
 generate_random_image(1000, 10)
