@@ -36,7 +36,7 @@ def generate_random_image(max_iter, num_images):
 
         if black_percentage >= 0.01 and white_percentage >= 0.01:
             i += 1
-            image.save(f"mandelbrot_random_{i}.png")
+            image.save(f"photos/mandelbrot_random_{i}.png")
             print(f"Image {i} Saved Successfully: Black {black_percentage*100:.2f}%, White {white_percentage*100:.2f}%")
         else:
             print(f"Image Skipped: Black {black_percentage*100:.2f}%, White {white_percentage*100:.2f}%")
