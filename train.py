@@ -62,10 +62,10 @@ model = MandelbrotNet().to(device)
 
 # Loss and optimizer
 #criterion = nn.MSELoss()
-#optimizer = torch.optim.SGD(model.parameters(), lr=0.2, momentum=0.9)
+optimizer = torch.optim.SGD(model.parameters(), lr=0.2, momentum=0.9)
 
 criterion = nn.BCELoss()
-optimizer = optim.Adam(model.parameters(), lr=0.0001)
+#optimizer = optim.Adam(model.parameters(), lr=0.0001)
 
 # Move data to GPU
 X = X.to(device)
