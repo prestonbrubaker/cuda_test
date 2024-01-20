@@ -51,7 +51,7 @@ X = X.to(device)
 y = y.to(device)
 
 # Training
-epochs = 1000000
+epochs = 100000
 for epoch in range(epochs):
     optimizer.zero_grad()
     outputs = model(X)
