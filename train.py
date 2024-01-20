@@ -13,7 +13,7 @@ def is_in_mandelbrot(c, max_iter=500):
     return 1  # In the Mandelbrot set
 
 # Creating a dataset
-data_size = 100000  # Number of data points
+data_size = 500000  # Number of data points
 X = np.random.uniform(-2, 2, (data_size, 2))  # Generate random pairs
 y = np.array([is_in_mandelbrot(complex(x[0], x[1])) for x in X])
 
@@ -53,7 +53,7 @@ X = X.to(device)
 y = y.to(device)
 
 # Training
-epochs = 100000
+epochs = 300000
 for epoch in range(epochs):
     optimizer.zero_grad()
     outputs = model(X)
