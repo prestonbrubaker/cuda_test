@@ -27,7 +27,7 @@ class MandelbrotNet(nn.Module):
         super(MandelbrotNet, self).__init__()
         self.fc1 = nn.Linear(2, 10)
         self.fc2 = nn.Linear(10, 10)
-        self.fc3 = nn.linear(10, 10)
+        self.fc3 = nn.Linear(10, 10)
         self.fc4 = nn.Linear(10, 1)
 
     def forward(self, x):
