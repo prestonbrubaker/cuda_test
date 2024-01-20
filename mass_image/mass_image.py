@@ -23,8 +23,8 @@ def generate_random_image(max_iter, num_images):
     i = 0
     while(i < num_images):
         # Randomly select a region within the bounds
-        center_x = random.uniform(-1.5, 0.5)
-        center_y = random.uniform(-1, 1)
+        center_x = random.uniform(-2, 2)
+        center_y = random.uniform(-2, 2)
         width = 0.2
         xmin, xmax = center_x - width/2, center_x + width/2
         ymin, ymax = center_y - width/2, center_y + width/2
