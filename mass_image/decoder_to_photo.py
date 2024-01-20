@@ -13,10 +13,10 @@ class Autoencoder(nn.Module):
             nn.ReLU(),
             nn.Conv2d(16, 32, 3, stride=2, padding=1),
             nn.ReLU(),
-            nn.Conv2d(32, 5, 7)
+            nn.Conv2d(32, 10, 7)
         )
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(5, 32, 7),
+            nn.ConvTranspose2d(10, 32, 7),
             nn.ReLU(),
             nn.ConvTranspose2d(32, 16, 3, stride=2, padding=1, output_padding=1),
             nn.ReLU(),
@@ -40,7 +40,7 @@ os.makedirs('decoded_photos', exist_ok=True)
 # Generate and save 50 decoded images
 for i in range(50):
     # Random input for the decoder
-    random_input = torch.randn(1, 5, 58, 58)  # Adjust as needed
+    random_input = torch.randn(1, 10, 58, 58)  # Adjust as needed
 
     # Run the decoder
     with torch.no_grad():
