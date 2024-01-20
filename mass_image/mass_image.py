@@ -34,7 +34,7 @@ def generate_random_image(max_iter, num_images):
         black_percentage = np.sum(mandelbrot_image == 0) / mandelbrot_image.size
         white_percentage = np.sum(mandelbrot_image == max_iter) / mandelbrot_image.size
 
-        if black_percentage < 0.99 or white_percentage < 0.99:  # Notice the 'or' condition
+        if black_percentage >= 0.01 and white_percentage >= 0.01:  # Updated condition
             i += 1
             image.save(f"mandelbrot_random_{i}.png")
             print(f"Image {i} Saved Successfully: Black {black_percentage*100:.2f}%, White {white_percentage*100:.2f}%")
