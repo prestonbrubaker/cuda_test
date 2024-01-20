@@ -12,10 +12,10 @@ class Autoencoder(nn.Module):
             nn.ReLU(),
             nn.Conv2d(16, 32, 3, stride=2, padding=1),
             nn.ReLU(),
-            nn.Conv2d(32, 64, 7)
+            nn.Conv2d(32, 5, 7)
         )
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(64, 32, 7),
+            nn.ConvTranspose2d(5, 32, 7),
             nn.ReLU(),
             nn.ConvTranspose2d(32, 16, 3, stride=2, padding=1, output_padding=1),
             nn.ReLU(),
@@ -35,7 +35,7 @@ model.eval()
 
 # Random input for the decoder
 # Assuming the compressed size is 64 feature maps of 64x64 (as in the defined model)
-random_input = torch.randn(1, 64, 64, 64)  # Batch size, Channels, Height, Width
+random_input = torch.randn(1, 5, 64, 64)  # Batch size, Channels, Height, Width
 
 # Run the decoder
 with torch.no_grad():
