@@ -40,7 +40,7 @@ for x in range(width):
         if(prediction < 0):
             color = (0, 0, 0)
         elif(prediction >= 0 and prediction <= 1):
-            color = (255 * prediction,255 * prediction,255 * prediction)
+            color = (int(255 * prediction) ,int(255 * prediction),int(255 * prediction))
         else:
             color = (255, 255, 255)
         image.putpixel((x, y), color)
