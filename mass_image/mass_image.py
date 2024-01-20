@@ -24,7 +24,7 @@ def generate_random_image(max_iter, num_images):
     while i < num_images:
         center_x = random.uniform(-2, 2)
         center_y = random.uniform(-2, 2)
-        width = 0.01
+        width = 0.001
         xmin, xmax = center_x - width/2, center_x + width/2
         ymin, ymax = center_y - width/2, center_y + width/2
 
