@@ -10,13 +10,19 @@ class MandelbrotNet(nn.Module):
         self.fc1 = nn.Linear(2, 10)
         self.fc2 = nn.Linear(10, 10)
         self.fc3 = nn.Linear(10, 10)
-        self.fc4 = nn.Linear(10, 1)
+        self.fc4 = nn.Linear(10, 10)
+        self.fc5 = nn.Linear(10, 10)
+        self.fc6 = nn.Linear(10, 10)
+        self.fc7 = nn.Linear(10, 1)
 
     def forward(self, x):
         x = torch.relu(self.fc1(x))
         x = torch.relu(self.fc2(x))
         x = torch.relu(self.fc3(x))
-        return torch.sigmoid(self.fc4(x))
+        x = torch.relu(self.fc4(x))
+        x = torch.relu(self.fc5(x))
+        x = torch.relu(self.fc6(x))
+        return torch.sigmoid(self.fc7(x))
 
 # Load the trained model
 model = MandelbrotNet()
