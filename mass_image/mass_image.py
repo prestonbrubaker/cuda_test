@@ -29,7 +29,7 @@ def generate_random_image(max_iter, num_images):
         xmin, xmax = center_x - width/2, center_x + width/2
         ymin, ymax = center_y - width/2, center_y + width/2
 
-        mandelbrot_image = mandelbrot_set(xmin, xmax, ymin, ymax, 512, 512, max_iter)
+        mandelbrot_image = mandelbrot_set(xmin, xmax, ymin, ymax, 256, 256, max_iter)
         image = Image.fromarray(np.uint8(mandelbrot_image / max_iter * 255), 'L')
         
         # Check if the image is not entirely black or white
