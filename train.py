@@ -31,7 +31,12 @@ class MandelbrotNet(nn.Module):
         self.fc4 = nn.Linear(10, 10)
         self.fc5 = nn.Linear(10, 10)
         self.fc6 = nn.Linear(10, 10)
-        self.fc7 = nn.Linear(10, 1)
+        self.fc7 = nn.Linear(10, 10)
+        self.fc8 = nn.Linear(10, 10)
+        self.fc9 = nn.Linear(10, 10)
+        self.fc10 = nn.Linear(10, 10)
+        self.fc11 = nn.Linear(10, 10)
+        self.fc12 = nn.Linear(10, 1)
 
     def forward(self, x):
         x = torch.relu(self.fc1(x))
@@ -40,7 +45,12 @@ class MandelbrotNet(nn.Module):
         x = torch.relu(self.fc4(x))
         x = torch.relu(self.fc5(x))
         x = torch.relu(self.fc6(x))
-        return torch.sigmoid(self.fc7(x))
+        x = torch.relu(self.fc7(x))
+        x = torch.relu(self.fc8(x))
+        x = torch.relu(self.fc9(x))
+        x = torch.relu(self.fc10(x))
+        x = torch.relu(self.fc11(x))
+        return torch.sigmoid(self.fc12(x))
 
 
 # Check for GPU
