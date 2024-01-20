@@ -30,7 +30,7 @@ model.load_state_dict(torch.load("mandelbrot_net.pth"))
 model.eval()
 
 # Image setup
-width, height = 800, 600
+width, height = 1600, 1200    #800, 600
 image = Image.new("RGB", (width, height))
 
 # Function to convert image coordinates to complex numbers
