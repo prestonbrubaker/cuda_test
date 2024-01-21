@@ -9,7 +9,6 @@ LATENT_DIM = 5
 
 
 # Define the Variational Autoencoder model
-# Variational Autoencoder model
 class VariationalAutoencoder(nn.Module):
     def __init__(self):
         super(VariationalAutoencoder, self).__init__()
@@ -60,7 +59,6 @@ class VariationalAutoencoder(nn.Module):
         mu, log_var = self.encode(x)
         z = self.reparameterize(mu, log_var)
         return self.decode(z), mu, log_var
-
 
 
 # Load the trained model
