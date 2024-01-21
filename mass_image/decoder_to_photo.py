@@ -59,7 +59,7 @@ model.load_state_dict(torch.load('autoencoder.pth'))
 model.eval()
 
 # Create the directory for generated photos if it doesn't exist
-os.makedirs('decoded_photos', exist_ok=True)
+os.makedirs('generated_photos', exist_ok=True)
 
 # Generate and save images
 num_images = 50  # Number of images to generate
@@ -80,7 +80,3 @@ for i in range(num_images):
     image.save(f'generated_photos/generated_image_{i+1}.png')
 
 print(f'{num_images} images saved in generated_photos folder')
-    # Save the image
-    image.save(f'decoded_photos/decoded_image_{i+1}.png')
-
-print('50 images saved in decoded_photos folder')
