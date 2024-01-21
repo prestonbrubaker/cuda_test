@@ -8,17 +8,17 @@ from PIL import Image
 LATENT_DIM = 7
 
 
-# Define the Variational Autoencoder model
+# Variational Autoencoder model
 class VariationalAutoencoder(nn.Module):
     def __init__(self):
         super(VariationalAutoencoder, self).__init__()
 
         # Encoder
         self.encoder = nn.Sequential(
-            nn.Conv2d(1, 8, kernel_size=3, stride=2, padding=1),
-            nn.BatchNorm2d(8),
+            nn.Conv2d(1, 24, kernel_size=3, stride=2, padding=1),
+            nn.BatchNorm2d(24),
             nn.ReLU(),
-            nn.Conv2d(8, 8, kernel_size=3, stride=2, padding=1),
+            nn.Conv2d(24, 8, kernel_size=3, stride=2, padding=1),
             nn.BatchNorm2d(8),
             nn.ReLU()
         )
@@ -30,10 +30,10 @@ class VariationalAutoencoder(nn.Module):
         # Adjust the output features to match the input of the first transposed conv layer
         self.decoder_input = nn.Linear(in_features=LATENT_DIM, out_features=8*64*64)
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(8, 8, kernel_size=3, stride=2, padding=1, output_padding=1),
-            nn.BatchNorm2d(8),
+            nn.ConvTranspose2d(8, 24, kernel_size=3, stride=2, padding=1, output_padding=1),
+            nn.BatchNorm2d(24),
             nn.ReLU(),
-            nn.ConvTranspose2d(8, 1, kernel_size=3, stride=2, padding=1, output_padding=1),
+            nn.ConvTranspose2d(24, 1, kernel_size=3, stride=2, padding=1, output_padding=1),
             nn.Sigmoid()
         )
 
