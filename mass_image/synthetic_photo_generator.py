@@ -41,4 +41,4 @@ def process_images(input_folder, output_folder, synthetic_multiplier):
                 save_path = os.path.join(output_folder, f'{os.path.splitext(filename)[0]}_synthetic{i}.png')  # Save as PNG
                 transform_image(file_path, save_path)
 
-process_images('photos', 'semi_synthetic_photos', synthetic_multiplier=5)
+process_images('photos', 'semi_synthetic_photos', synthetic_multiplier=500)
