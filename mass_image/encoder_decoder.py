@@ -24,6 +24,20 @@ class MandelbrotDataset(Dataset):
             image = self.transform(image)
         return image
 
+class TensorDataset(Dataset):
+    def __init__(self, folder_path):
+        self.file_list = [f for f in os.listdir(folder_path) if f.endswith('.pt')]
+        self.folder_path = folder_path
+
+    def __len__(self):
+        return len(self.file_list)
+
+    def __getitem__(self, idx):
+        tensor_path = os.path.join(self.folder_path, self.file_list[idx])
+        tensor = torch.load(tensor_path)
+        return tensor
+
+
 # Autoencoder model
 class Autoencoder(nn.Module):
     def __init__(self):
@@ -74,10 +88,18 @@ transform = transforms.Compose([
     transforms.ToTensor()
 ])
 
-# Load dataset
-dataset = MandelbrotDataset(folder_path='semi_synthetic_photos', transform=transform)
-#dataloader = DataLoader(dataset, batch_size=len(dataset), shuffle=True)  # Choose an appropriate batch size
-dataloader = DataLoader(dataset, batch_size=600, shuffle=True)  # Choose an appropriate batch size
+
+# Global variable to choose which dataset to use
+USE_PREPROCESSED_DATASET = True  # Set to True to use preprocessed dataset
+
+# Then, in your main script where you load the dataset:
+if USE_PREPROCESSED_DATASET:
+    dataset = TensorDataset(folder_path='path/to/preprocessed/photos')
+else:
+    dataset = MandelbrotDataset(folder_path='semi_synthetic_photos', transform=transform)
+
+dataloader = DataLoader(dataset, batch_size=600, shuffle=True)
+
 
 # Instantiate model
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
