@@ -77,6 +77,6 @@ for i in range(num_images):
     generated_image = (generated_image * 255).astype(np.uint8)  # Convert to 8-bit pixel values
     image = Image.fromarray(generated_image, 'L')
     image = image.resize((256, 256), Image.ANTIALIAS)
-    image.save(f'generated_photos/generated_image_{i+1}.png')
+    image.save(f'decoded_photos/decoded_image_{i+1}.png')
 
-print(f'{num_images} images saved in generated_photos folder')
+print(f'{num_images} images saved in decoded_photos folder')
