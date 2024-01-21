@@ -74,7 +74,7 @@ class Autoencoder(nn.Module):
 
 # Load dataset
 
-augment_factor = 2  # Number of augmented images per original image
+augment_factor = 20  # Number of augmented images per original image
 
 transform = transforms.Compose([
     transforms.Grayscale(), 
@@ -94,7 +94,7 @@ optimizer = optim.Adam(model.parameters(), lr=0.001)
 #optimizer = torch.optim.SGD(model.parameters(), lr=0.01, momentum=0.95)
 
 # Train the model
-num_epochs = 1000
+num_epochs = 10000
 for epoch in range(num_epochs):
     for data in dataloader:
         img = data.to(device)
@@ -106,6 +106,10 @@ for epoch in range(num_epochs):
         loss.backward()
         optimizer.step()
     print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}')
+    if(epoch % 100 == 0):
+        # Save the model
+        torch.save(model.state_dict(), 'autoencoder.pth'
+        print("Model Saved")
 
 # Save the model
 torch.save(model.state_dict(), 'autoencoder.pth')
