@@ -128,7 +128,7 @@ model = VariationalAutoencoder().to(device)
 
 # Loss and optimizer
 # For VAE, use the custom loss function that includes both BCE and KLD
-optimizer = optim.Adam(model.parameters(), lr=0.05, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.01, amsgrad=True)
+optimizer = optim.Adam(model.parameters(), lr=0.01, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.01, amsgrad=True)
 
 # Train the model
 num_epochs = 100000
@@ -138,8 +138,6 @@ for epoch in range(num_epochs):
         # Forward pass
         recon_batch, mu, log_var = model(img)
 
-        # Clip the outputs for debugging
-        recon_batch = torch.clamp(recon_batch, 0, 1)
         
         loss = loss_function(recon_batch, img, mu, log_var)
         
