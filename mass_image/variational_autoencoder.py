@@ -56,8 +56,8 @@ class VariationalAutoencoder(nn.Module):
             nn.BatchNorm2d(8),
             nn.ReLU()
         )
-        self.fc_mu = nn.Linear(in_features=5*64*64, out_features=LATENT_DIM)
-        self.fc_log_var = nn.Linear(in_features=5*64*64, out_features=LATENT_DIM)
+        self.fc_mu = nn.Linear(in_features=8*64*64, out_features=LATENT_DIM)
+        self.fc_log_var = nn.Linear(in_features=8*64*64, out_features=LATENT_DIM)
 
         # Decoder
         self.decoder_input = nn.Linear(in_features=LATENT_DIM, out_features=5*64*64)
