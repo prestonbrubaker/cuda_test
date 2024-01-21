@@ -53,30 +53,30 @@ class Autoencoder(nn.Module):
         super(Autoencoder, self).__init__()
         # Encoder
         self.encoder = nn.Sequential(
-            nn.Conv2d(1, 16, 5, stride=2, padding=1),  # Input channels: 1, Output channels: 16, Kernel size: 3, Stride: 2, Padding: 1
-            nn.BatchNorm2d(16),                       # Batch Normalization for 16 feature maps
-            nn.ReLU(),                                # ReLU activation
-            nn.Conv2d(16, 32, 5, stride=2, padding=1),# Input channels: 16, Output channels: 32, Kernel size: 3, Stride: 2, Padding: 1
-            nn.BatchNorm2d(32),                       # Batch Normalization for 32 feature maps
-            nn.ReLU(),                                # ReLU activation
-            nn.Conv2d(32, 64, 5, stride=2, padding=1),# Input channels: 32, Output channels: 64, Kernel size: 3, Stride: 2, Padding: 1
-            nn.BatchNorm2d(64),                       # Batch Normalization for 64 feature maps
-            nn.ReLU(),                                # ReLU activation
-            nn.Conv2d(64, 5, 5, stride=2, padding=1)  # Input channels: 64, Output channels: 5, Kernel size: 3, Stride: 2, Padding: 1 (final compressed representation)
+            nn.Conv2d(1, 16, kernel_size=5, stride=2, padding=2),
+            nn.BatchNorm2d(16),
+            nn.ReLU(),
+            nn.Conv2d(16, 32, kernel_size=5, stride=2, padding=2),
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
+            nn.Conv2d(32, 64, kernel_size=5, stride=2, padding=2),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.Conv2d(64, 5, kernel_size=5, stride=2, padding=2)  # Compressed to 5 feature maps
         )
         # Decoder
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(5, 64, 5, stride=2, padding=1, output_padding=1), # Input channels: 5, Output channels: 64, Kernel size: 3, Stride: 2, Padding: 1, Output padding: 1
-            nn.BatchNorm2d(64),                       # Batch Normalization for 64 feature maps
-            nn.ReLU(),                                # ReLU activation
-            nn.ConvTranspose2d(64, 32, 5, stride=2, padding=1, output_padding=1),# Input channels: 64, Output channels: 32, Kernel size: 3, Stride: 2, Padding: 1, Output padding: 1
-            nn.BatchNorm2d(32),                       # Batch Normalization for 32 feature maps
-            nn.ReLU(),                                # ReLU activation
-            nn.ConvTranspose2d(32, 16, 5, stride=2, padding=1, output_padding=1),# Input channels: 32, Output channels: 16, Kernel size: 3, Stride: 2, Padding: 1, Output padding: 1
-            nn.BatchNorm2d(16),                       # Batch Normalization for 16 feature maps
-            nn.ReLU(),                                # ReLU activation
-            nn.ConvTranspose2d(16, 1, 5, stride=2, padding=1, output_padding=1), # Input channels: 16, Output channels: 1, Kernel size: 3, Stride: 2, Padding: 1, Output padding: 1 (restored to original dimensions)
-            nn.Sigmoid()                              # Sigmoid activation to normalize the output to [0,1] range
+            nn.ConvTranspose2d(5, 64, kernel_size=5, stride=2, padding=2, output_padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.ConvTranspose2d(64, 32, kernel_size=5, stride=2, padding=2, output_padding=1),
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
+            nn.ConvTranspose2d(32, 16, kernel_size=5, stride=2, padding=2, output_padding=1),
+            nn.BatchNorm2d(16),
+            nn.ReLU(),
+            nn.ConvTranspose2d(16, 1, kernel_size=5, stride=2, padding=2, output_padding=1),
+            nn.Sigmoid()  # Using sigmoid for pixel value range [0, 1]
         )
 
     def forward(self, x):
