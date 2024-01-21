@@ -98,7 +98,7 @@ class Autoencoder(nn.Module):
 
 # Load dataset
 
-augment_factor = 10  # Number of augmented images per original image
+augment_factor = 0  # Number of augmented images per original image
 
 transform = transforms.Compose([
     transforms.Grayscale(), 
@@ -106,8 +106,8 @@ transform = transforms.Compose([
 ])
 dataset = MandelbrotDataset(folder_path='photos', transform=original_transform, 
                             augmentation_transform=augmentation_transform, augment_factor=augment_factor)
-#dataloader = DataLoader(dataset, batch_size=len(dataset), shuffle=True)
-dataloader = DataLoader(dataset, batch_size=400, shuffle=True)
+dataloader = DataLoader(dataset, batch_size=len(dataset), shuffle=True)
+#dataloader = DataLoader(dataset, batch_size=400, shuffle=True)
 
 # Instantiate model
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
