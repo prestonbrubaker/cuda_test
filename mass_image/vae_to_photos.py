@@ -5,7 +5,7 @@ import numpy as np
 from PIL import Image
 
 # Global variable for the dimension of the latent space
-LATENT_DIM = 5
+LATENT_DIM = 7
 
 
 # Define the Variational Autoencoder model
