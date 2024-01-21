@@ -60,7 +60,7 @@ class VariationalAutoencoder(nn.Module):
         self.fc_log_var = nn.Linear(in_features=8*64*64, out_features=LATENT_DIM)
 
         # Decoder
-        self.decoder_input = nn.Linear(in_features=LATENT_DIM, out_features=5*64*64)
+        self.decoder_input = nn.Linear(in_features=LATENT_DIM, out_features=8*64*64)
         self.decoder = nn.Sequential(
             nn.ConvTranspose2d(8, 8, kernel_size=3, stride=2, padding=1, output_padding=1),
             nn.BatchNorm2d(8),
