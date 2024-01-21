@@ -9,6 +9,7 @@ LATENT_DIM = 5
 
 
 # Define the Variational Autoencoder model
+# Variational Autoencoder model
 class VariationalAutoencoder(nn.Module):
     def __init__(self):
         super(VariationalAutoencoder, self).__init__()
@@ -22,11 +23,13 @@ class VariationalAutoencoder(nn.Module):
             nn.BatchNorm2d(8),
             nn.ReLU()
         )
+        # Adjust the input features of the following layers based on the encoder output
         self.fc_mu = nn.Linear(in_features=8*64*64, out_features=LATENT_DIM)
         self.fc_log_var = nn.Linear(in_features=8*64*64, out_features=LATENT_DIM)
 
         # Decoder
-        self.decoder_input = nn.Linear(in_features=LATENT_DIM, out_features=5*64*64)
+        # Adjust the output features to match the input of the first transposed conv layer
+        self.decoder_input = nn.Linear(in_features=LATENT_DIM, out_features=8*64*64)
         self.decoder = nn.Sequential(
             nn.ConvTranspose2d(8, 8, kernel_size=3, stride=2, padding=1, output_padding=1),
             nn.BatchNorm2d(8),
@@ -49,7 +52,7 @@ class VariationalAutoencoder(nn.Module):
 
     def decode(self, z):
         x = self.decoder_input(z)
-        x = x.view(-1, 5, 64, 64)
+        x = x.view(-1, 8, 64, 64)
         x = self.decoder(x)
         return x
 
@@ -57,6 +60,8 @@ class VariationalAutoencoder(nn.Module):
         mu, log_var = self.encode(x)
         z = self.reparameterize(mu, log_var)
         return self.decode(z), mu, log_var
+
+
 
 # Load the trained model
 model = VariationalAutoencoder()
