@@ -74,6 +74,14 @@ class Autoencoder(nn.Module):
             nn.Sigmoid()
         )
 
+        # Apply the weight initialization
+        self.apply(self._init_weights)
+
+    def _init_weights(self, m):
+        if isinstance(m, nn.Conv2d) or isinstance(m, nn.ConvTranspose2d):
+            nn.init.kaiming_uniform_(m.weight, nonlinearity='relu')
+            if m.bias is not None:
+                nn.init.constant_(m.bias, 0)
 
     def forward(self, x):
         x = self.encoder(x)
@@ -107,8 +115,8 @@ model = Autoencoder().to(device)
 
 # Loss and optimizer
 criterion = nn.MSELoss()
-optimizer = optim.Adam(model.parameters(), lr=0.0001, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.01, amsgrad=True)
-#optimizer = torch.optim.SGD(model.parameters(), lr=0.2, momentum=0.9)
+#optimizer = optim.Adam(model.parameters(), lr=0.0001, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.01, amsgrad=True)
+optimizer = torch.optim.SGD(model.parameters(), lr=0.05, momentum=0.9)
 
 # Train the model
 num_epochs = 100000
