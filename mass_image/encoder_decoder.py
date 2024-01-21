@@ -108,7 +108,7 @@ for epoch in range(num_epochs):
     print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}')
     if(epoch % 100 == 0):
         # Save the model
-        torch.save(model.state_dict(), 'autoencoder.pth'
+        torch.save(model.state_dict(), 'autoencoder.pth')
         print("Model Saved")
 
 # Save the model
