@@ -94,7 +94,7 @@ USE_PREPROCESSED_DATASET = True  # Set to True to use preprocessed dataset
 
 # Then, in your main script where you load the dataset:
 if USE_PREPROCESSED_DATASET:
-    dataset = TensorDataset(folder_path='path/to/preprocessed/photos')
+    dataset = TensorDataset(folder_path='tensor_database')
 else:
     dataset = MandelbrotDataset(folder_path='semi_synthetic_photos', transform=transform)
 
