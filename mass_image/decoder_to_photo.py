@@ -64,7 +64,7 @@ os.makedirs('decoded_photos', exist_ok=True)
 # Generate and save 50 decoded images
 for i in range(50):
     # Random input for the decoder
-    random_input = torch.randn(1, 5, 58, 58)
+    random_input = torch.randn(1, 5, 256, 256)
 
     # Run the decoder
     with torch.no_grad():
