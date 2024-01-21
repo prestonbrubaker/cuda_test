@@ -86,7 +86,7 @@ class Autoencoder(nn.Module):
 
 # Load dataset
 
-augment_factor = 2  # Number of augmented images per original image
+augment_factor = 10  # Number of augmented images per original image
 
 transform = transforms.Compose([
     transforms.Grayscale(), 
