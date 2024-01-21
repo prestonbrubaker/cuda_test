@@ -10,23 +10,24 @@ class Autoencoder(nn.Module):
         super(Autoencoder, self).__init__()
         # Encoder
         self.encoder = nn.Sequential(
-            nn.Conv2d(1, 16, kernel_size=10, stride=2, padding=4),
+            nn.Conv2d(1, 16, kernel_size=3, stride=2, padding=1),  # Output size: [16, 128, 128]
             nn.BatchNorm2d(16),
             nn.ReLU(),
-            nn.Conv2d(16, 32, kernel_size=10, stride=2, padding=4),
+            nn.Conv2d(16, 32, kernel_size=3, stride=2, padding=1),  # Output size: [32, 64, 64]
             nn.BatchNorm2d(32),
             nn.ReLU(),
-            nn.Conv2d(32, 16, kernel_size=10, stride=2, padding=4)  # Compressed to 16 feature maps
+            nn.Conv2d(32, 16, kernel_size=3, stride=2, padding=1)  # Output size: [16, 32, 32]
         )
+        
         # Decoder
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(16, 32, kernel_size=10, stride=2, padding=4, output_padding=1),
+            nn.ConvTranspose2d(16, 32, kernel_size=3, stride=2, padding=1, output_padding=1),  # Output size: [32, 64, 64]
             nn.BatchNorm2d(32),
             nn.ReLU(),
-            nn.ConvTranspose2d(32, 16, kernel_size=10, stride=2, padding=4, output_padding=1),
+            nn.ConvTranspose2d(32, 16, kernel_size=3, stride=2, padding=1, output_padding=1),  # Output size: [16, 128, 128]
             nn.BatchNorm2d(16),
             nn.ReLU(),
-            nn.ConvTranspose2d(16, 1, kernel_size=10, stride=2, padding=4, output_padding=1),
+            nn.ConvTranspose2d(16, 1, kernel_size=3, stride=2, padding=1, output_padding=1),  # Output size: [1, 256, 256]
             nn.Sigmoid()
         )
 
