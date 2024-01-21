@@ -114,11 +114,11 @@ model = Autoencoder().to(device)
 
 # Loss and optimizer
 criterion = nn.MSELoss()
-optimizer = optim.Adam(model.parameters(), lr=0.0001)
+optimizer = optim.Adam(model.parameters(), lr=0.0001, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.01, amsgrad=True)
 #optimizer = torch.optim.SGD(model.parameters(), lr=0.4, momentum=0.9)
 
 # Train the model
-num_epochs = 10000
+num_epochs = 100000
 for epoch in range(num_epochs):
     for data in dataloader:
         img = data.to(device)
