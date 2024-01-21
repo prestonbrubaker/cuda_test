@@ -51,20 +51,32 @@ augmentation_transform = transforms.Compose([
 class Autoencoder(nn.Module):
     def __init__(self):
         super(Autoencoder, self).__init__()
+        # Encoder
         self.encoder = nn.Sequential(
-            nn.Conv2d(1, 16, 3, stride=2, padding=1), # Assuming grayscale images
+            nn.Conv2d(1, 16, 3, stride=2, padding=1),
+            nn.BatchNorm2d(16),
             nn.ReLU(),
             nn.Conv2d(16, 32, 3, stride=2, padding=1),
+            nn.BatchNorm2d(32),
             nn.ReLU(),
-            nn.Conv2d(32, 5, 7) # Compressed to 5 feature maps
+            nn.Conv2d(32, 64, 3, stride=2, padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.Conv2d(64, 5, 3, stride=2, padding=1)  # Compressed to 5 feature maps
         )
+        # Decoder
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(5, 32, 7),
+            nn.ConvTranspose2d(5, 64, 3, stride=2, padding=1, output_padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.ConvTranspose2d(64, 32, 3, stride=2, padding=1, output_padding=1),
+            nn.BatchNorm2d(32),
             nn.ReLU(),
             nn.ConvTranspose2d(32, 16, 3, stride=2, padding=1, output_padding=1),
+            nn.BatchNorm2d(16),
             nn.ReLU(),
             nn.ConvTranspose2d(16, 1, 3, stride=2, padding=1, output_padding=1),
-            nn.Sigmoid() # Using sigmoid for pixel value range [0, 1]
+            nn.Sigmoid()  # Using sigmoid for pixel value range [0, 1]
         )
 
     def forward(self, x):
