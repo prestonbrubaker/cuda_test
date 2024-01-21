@@ -53,7 +53,7 @@ transform = transforms.Compose([
     transforms.Grayscale(), 
     transforms.ToTensor()
 ])
-dataset = MandelbrotDataset(folder_path='photos_copy', transform=transform)
+dataset = MandelbrotDataset(folder_path='photos', transform=transform)
 dataloader = DataLoader(dataset, batch_size=32, shuffle=True)
 
 # Instantiate model
