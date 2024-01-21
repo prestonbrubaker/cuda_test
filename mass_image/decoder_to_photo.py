@@ -25,11 +25,11 @@ class Autoencoder(nn.Module):
             nn.Conv2d(64, 64, kernel_size=5, stride=2, padding=2),
             nn.BatchNorm2d(64),
             nn.ReLU(),
-            nn.Conv2d(64, 30, kernel_size=5, stride=2, padding=2)  # Compressed to 30 feature maps
+            nn.Conv2d(64, 5, kernel_size=5, stride=2, padding=2)  # Compressed to 5 feature maps
         )
         # Decoder
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(30, 64, kernel_size=5, stride=2, padding=2, output_padding=1),
+            nn.ConvTranspose2d(5, 64, kernel_size=5, stride=2, padding=2, output_padding=1),
             nn.BatchNorm2d(64),
             nn.ReLU(),
             nn.ConvTranspose2d(64, 64, kernel_size=5, stride=2, padding=2, output_padding=1),
@@ -64,7 +64,7 @@ os.makedirs('decoded_photos', exist_ok=True)
 # Generate and save 50 decoded images
 for i in range(50):
     # Random input for the decoder
-    random_input = torch.randn(1, 30, 58, 58)
+    random_input = torch.randn(1, 5, 58, 58)
 
     # Run the decoder
     with torch.no_grad():
