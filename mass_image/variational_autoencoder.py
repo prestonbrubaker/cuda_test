@@ -7,6 +7,10 @@ from PIL import Image
 import os
 import random
 
+# Global variable for the dimension of the latent space
+LATENT_DIM = 5  # You can change this number as needed
+
+
 # Custom Dataset
 class MandelbrotDataset(Dataset):
     def __init__(self, folder_path, transform=None):
@@ -45,23 +49,23 @@ class VariationalAutoencoder(nn.Module):
 
         # Encoder
         self.encoder = nn.Sequential(
-            nn.Conv2d(1, 5, kernel_size=3, stride=2, padding=1),
-            nn.BatchNorm2d(5),
+            nn.Conv2d(1, 8, kernel_size=3, stride=2, padding=1),
+            nn.BatchNorm2d(8),
             nn.ReLU(),
-            nn.Conv2d(5, 5, kernel_size=3, stride=2, padding=1),
-            nn.BatchNorm2d(5),
+            nn.Conv2d(8, 8, kernel_size=3, stride=2, padding=1),
+            nn.BatchNorm2d(8),
             nn.ReLU()
         )
-        self.fc_mu = nn.Linear(in_features=5*64*64, out_features=2)
-        self.fc_log_var = nn.Linear(in_features=5*64*64, out_features=2)
+        self.fc_mu = nn.Linear(in_features=5*64*64, out_features=LATENT_DIM)
+        self.fc_log_var = nn.Linear(in_features=5*64*64, out_features=LATENT_DIM)
 
         # Decoder
-        self.decoder_input = nn.Linear(in_features=2, out_features=5*64*64)
+        self.decoder_input = nn.Linear(in_features=LATENT_DIM, out_features=5*64*64)
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(5, 5, kernel_size=3, stride=2, padding=1, output_padding=1),
-            nn.BatchNorm2d(5),
+            nn.ConvTranspose2d(8, 8, kernel_size=3, stride=2, padding=1, output_padding=1),
+            nn.BatchNorm2d(8),
             nn.ReLU(),
-            nn.ConvTranspose2d(5, 1, kernel_size=3, stride=2, padding=1, output_padding=1),
+            nn.ConvTranspose2d(8, 1, kernel_size=3, stride=2, padding=1, output_padding=1),
             nn.Sigmoid()
         )
 
