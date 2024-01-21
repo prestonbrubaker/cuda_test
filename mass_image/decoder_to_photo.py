@@ -19,11 +19,23 @@ class Autoencoder(nn.Module):
             nn.Conv2d(32, 64, kernel_size=5, stride=2, padding=2),
             nn.BatchNorm2d(64),
             nn.ReLU(),
+            nn.Conv2d(64, 64, kernel_size=5, stride=2, padding=2),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.Conv2d(64, 64, kernel_size=5, stride=2, padding=2),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
             nn.Conv2d(64, 30, kernel_size=5, stride=2, padding=2)  # Compressed to 30 feature maps
         )
         # Decoder
         self.decoder = nn.Sequential(
             nn.ConvTranspose2d(30, 64, kernel_size=5, stride=2, padding=2, output_padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.ConvTranspose2d(64, 64, kernel_size=5, stride=2, padding=2, output_padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.ConvTranspose2d(64, 64, kernel_size=5, stride=2, padding=2, output_padding=1),
             nn.BatchNorm2d(64),
             nn.ReLU(),
             nn.ConvTranspose2d(64, 32, kernel_size=5, stride=2, padding=2, output_padding=1),
@@ -33,7 +45,7 @@ class Autoencoder(nn.Module):
             nn.BatchNorm2d(16),
             nn.ReLU(),
             nn.ConvTranspose2d(16, 1, kernel_size=5, stride=2, padding=2, output_padding=1),
-            nn.Sigmoid()  # Using sigmoid for pixel value range [0, 1]
+            nn.Sigmoid()
         )
 
     def forward(self, x):
