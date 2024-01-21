@@ -68,7 +68,7 @@ transform = transforms.Compose([
 # Load dataset
 dataset = MandelbrotDataset(folder_path='semi_synthetic_photos', transform=transform)
 #dataloader = DataLoader(dataset, batch_size=len(dataset), shuffle=True)  # Choose an appropriate batch size
-dataloader = DataLoader(dataset, batch_size=200, shuffle=True)  # Choose an appropriate batch size
+dataloader = DataLoader(dataset, batch_size=400, shuffle=True)  # Choose an appropriate batch size
 
 # Instantiate model
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
