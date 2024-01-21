@@ -5,8 +5,9 @@ from torch.utils.data import DataLoader, Dataset
 from torchvision import transforms
 from PIL import Image
 import os
+import random
 
-# Custom dataset
+# Custom dataset with transformations
 class MandelbrotDataset(Dataset):
     def __init__(self, folder_path, transform=None):
         self.file_list = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
@@ -19,9 +20,18 @@ class MandelbrotDataset(Dataset):
     def __getitem__(self, idx):
         img_path = os.path.join(self.folder_path, self.file_list[idx])
         image = Image.open(img_path)
+
+        # Apply transformations
         if self.transform:
             image = self.transform(image)
         return image
+
+# Define transformations
+transform = transforms.Compose([
+    transforms.Grayscale(),
+    transforms.RandomAffine(degrees=30, scale=(0.8, 1.2)), # Rotate by up to 30 degrees and scale
+    transforms.ToTensor(),
+])
 
 # Autoencoder model
 class Autoencoder(nn.Module):
