@@ -45,32 +45,32 @@ class Autoencoder(nn.Module):
 
         # Encoder
         # Each Conv2d layer halves the spatial dimensions
-        # Input size: [1, 256, 256], Output size after layer: [8, 128, 128]
+        # Input size: [1, 256, 256], Output size after layer: [5, 128, 128]
         self.encoder = nn.Sequential(
-            nn.Conv2d(1, 8, kernel_size=3, stride=2, padding=1),  
-            nn.BatchNorm2d(8),
+            nn.Conv2d(1, 5, kernel_size=3, stride=2, padding=1),  
+            nn.BatchNorm2d(5),
             nn.ReLU(),
-            # Input size: [8, 128, 128], Output size after layer: [8, 64, 64]
-            nn.Conv2d(8, 8, kernel_size=3, stride=2, padding=1),
-            nn.BatchNorm2d(8),
+            # Input size: [5, 128, 128], Output size after layer: [5, 64, 64]
+            nn.Conv2d(5, 5, kernel_size=3, stride=2, padding=1),
+            nn.BatchNorm2d(5),
             nn.ReLU(),
-            # Input size: [8, 64, 64], Output size after layer: [4, 32, 32]
-            nn.Conv2d(8, 4, kernel_size=3, stride=2, padding=1)
+            # Input size: [5, 64, 64], Output size after layer: [5, 32, 32]
+            nn.Conv2d(5, 2, kernel_size=3, stride=2, padding=1)
         )
         
         # Decoder
         # Each ConvTranspose2d layer doubles the spatial dimensions
-        # Input size: [4, 32, 32], Output size after layer: [8, 64, 64]
+        # Input size: [5, 32, 32], Output size after layer: [5, 64, 64]
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(4, 8, kernel_size=3, stride=2, padding=1, output_padding=1),
-            nn.BatchNorm2d(8),
+            nn.ConvTranspose2d(2, 5, kernel_size=3, stride=2, padding=1, output_padding=1),
+            nn.BatchNorm2d(5),
             nn.ReLU(),
-            # Input size: [8, 64, 64], Output size after layer: [8, 128, 128]
-            nn.ConvTranspose2d(8, 8, kernel_size=3, stride=2, padding=1, output_padding=1),
-            nn.BatchNorm2d(8),
+            # Input size: [5, 64, 64], Output size after layer: [5, 128, 128]
+            nn.ConvTranspose2d(5, 5, kernel_size=3, stride=2, padding=1, output_padding=1),
+            nn.BatchNorm2d(5),
             nn.ReLU(),
-            # Input size: [8, 128, 128], Output size after layer: [1, 256, 256]
-            nn.ConvTranspose2d(8, 1, kernel_size=3, stride=2, padding=1, output_padding=1),
+            # Input size: [5, 128, 128], Output size after layer: [5, 256, 256]
+            nn.ConvTranspose2d(5, 1, kernel_size=3, stride=2, padding=1, output_padding=1),
             nn.Sigmoid()
         )
 
