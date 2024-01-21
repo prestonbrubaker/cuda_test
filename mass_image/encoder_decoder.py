@@ -7,29 +7,43 @@ from PIL import Image
 import os
 import random
 
-# Custom dataset with transformations
+# Custom dataset with augmentation
 class MandelbrotDataset(Dataset):
-    def __init__(self, folder_path, transform=None):
+    def __init__(self, folder_path, transform=None, augmentation_transform=None, augment_factor=2):
         self.file_list = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
         self.folder_path = folder_path
         self.transform = transform
+        self.augmentation_transform = augmentation_transform
+        self.augment_factor = augment_factor
 
     def __len__(self):
-        return len(self.file_list)
+        return len(self.file_list) * (1 + self.augment_factor)
 
     def __getitem__(self, idx):
-        img_path = os.path.join(self.folder_path, self.file_list[idx])
+        file_idx = idx // (1 + self.augment_factor)  # Determine the file index
+        img_path = os.path.join(self.folder_path, self.file_list[file_idx])
         image = Image.open(img_path)
 
-        # Apply transformations
-        if self.transform:
-            image = self.transform(image)
+        if idx % (1 + self.augment_factor) == 0:
+            # Original image
+            if self.transform:
+                image = self.transform(image)
+        else:
+            # Augmented image
+            if self.augmentation_transform:
+                image = self.augmentation_transform(image)
+
         return image
 
 # Define transformations
-transform = transforms.Compose([
+original_transform = transforms.Compose([
     transforms.Grayscale(),
-    transforms.RandomAffine(degrees=30, scale=(0.8, 1.2)), # Rotate by up to 30 degrees and scale
+    transforms.ToTensor(),
+])
+
+augmentation_transform = transforms.Compose([
+    transforms.Grayscale(),
+    transforms.RandomAffine(degrees=30, scale=(0.8, 1.2)), # Rotate and scale
     transforms.ToTensor(),
 ])
 
@@ -59,11 +73,15 @@ class Autoencoder(nn.Module):
         return x
 
 # Load dataset
+
+augment_factor = 10  # Number of augmented images per original image
+
 transform = transforms.Compose([
     transforms.Grayscale(), 
     transforms.ToTensor()
 ])
-dataset = MandelbrotDataset(folder_path='photos', transform=transform)
+dataset = MandelbrotDataset(folder_path='photos', transform=original_transform, 
+                            augmentation_transform=augmentation_transform, augment_factor=augment_factor)
 dataloader = DataLoader(dataset, batch_size=32, shuffle=True)
 
 # Instantiate model
