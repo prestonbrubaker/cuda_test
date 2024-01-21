@@ -137,6 +137,10 @@ for epoch in range(num_epochs):
         img = data.to(device)
         # Forward pass
         recon_batch, mu, log_var = model(img)
+
+        # Clip the outputs for debugging
+        recon_batch = torch.clamp(recon_batch, 0, 1)
+        
         loss = loss_function(recon_batch, img, mu, log_var)
         
         # Backward pass and optimize
