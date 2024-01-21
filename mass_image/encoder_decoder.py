@@ -62,11 +62,11 @@ class Autoencoder(nn.Module):
             nn.Conv2d(32, 64, kernel_size=5, stride=2, padding=2),
             nn.BatchNorm2d(64),
             nn.ReLU(),
-            nn.Conv2d(64, 5, kernel_size=5, stride=2, padding=2)  # Compressed to 5 feature maps
+            nn.Conv2d(64, 30, kernel_size=5, stride=2, padding=2)  # Compressed to 30 feature maps
         )
         # Decoder
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(5, 64, kernel_size=5, stride=2, padding=2, output_padding=1),
+            nn.ConvTranspose2d(30, 64, kernel_size=5, stride=2, padding=2, output_padding=1),
             nn.BatchNorm2d(64),
             nn.ReLU(),
             nn.ConvTranspose2d(64, 32, kernel_size=5, stride=2, padding=2, output_padding=1),
@@ -94,7 +94,7 @@ transform = transforms.Compose([
 ])
 dataset = MandelbrotDataset(folder_path='photos', transform=original_transform, 
                             augmentation_transform=augmentation_transform, augment_factor=augment_factor)
-dataloader = DataLoader(dataset, batch_size=32, shuffle=True)
+dataloader = DataLoader(dataset, batch_size=128, shuffle=True)
 
 # Instantiate model
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
