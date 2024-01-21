@@ -21,14 +21,14 @@ class Autoencoder(nn.Module):
             nn.BatchNorm2d(5),
             nn.ReLU(),
             # Input size: [5, 64, 64], Output size after layer: [5, 32, 32]
-            nn.Conv2d(5, 5, kernel_size=3, stride=2, padding=1)
+            nn.Conv2d(5, 2, kernel_size=3, stride=2, padding=1)
         )
         
         # Decoder
         # Each ConvTranspose2d layer doubles the spatial dimensions
         # Input size: [5, 32, 32], Output size after layer: [5, 64, 64]
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(5, 5, kernel_size=3, stride=2, padding=1, output_padding=1),
+            nn.ConvTranspose2d(2, 5, kernel_size=3, stride=2, padding=1, output_padding=1),
             nn.BatchNorm2d(5),
             nn.ReLU(),
             # Input size: [5, 64, 64], Output size after layer: [5, 128, 128]
