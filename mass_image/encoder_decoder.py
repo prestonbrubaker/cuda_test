@@ -28,26 +28,35 @@ class MandelbrotDataset(Dataset):
 class Autoencoder(nn.Module):
     def __init__(self):
         super(Autoencoder, self).__init__()
+
         # Encoder
+        # Each Conv2d layer halves the spatial dimensions
+        # Input size: [1, 256, 256], Output size after layer: [8, 128, 128]
         self.encoder = nn.Sequential(
-            nn.Conv2d(1, 8, kernel_size=10, stride=2, padding=4),  # Output size: [8, 128, 128]
+            nn.Conv2d(1, 8, kernel_size=5, stride=2, padding=2),  
             nn.BatchNorm2d(8),
             nn.ReLU(),
-            nn.Conv2d(8, 8, kernel_size=10, stride=2, padding=4),  # Output size: [8, 64, 64]
+            # Input size: [8, 128, 128], Output size after layer: [8, 64, 64]
+            nn.Conv2d(8, 8, kernel_size=5, stride=2, padding=2),
             nn.BatchNorm2d(8),
             nn.ReLU(),
-            nn.Conv2d(8, 4, kernel_size=10, stride=2, padding=4)  # Output size: [4, 32, 32]
+            # Input size: [8, 64, 64], Output size after layer: [4, 32, 32]
+            nn.Conv2d(8, 4, kernel_size=5, stride=2, padding=2)
         )
         
         # Decoder
+        # Each ConvTranspose2d layer doubles the spatial dimensions
+        # Input size: [4, 32, 32], Output size after layer: [8, 64, 64]
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(4, 8, kernel_size=10, stride=2, padding=4, output_padding=1),  # Output size: [4, 64, 64]
+            nn.ConvTranspose2d(4, 8, kernel_size=5, stride=2, padding=2, output_padding=1),
             nn.BatchNorm2d(8),
             nn.ReLU(),
-            nn.ConvTranspose2d(8, 8, kernel_size=10, stride=2, padding=4, output_padding=1),  # Output size: [8, 128, 128]
+            # Input size: [8, 64, 64], Output size after layer: [8, 128, 128]
+            nn.ConvTranspose2d(8, 8, kernel_size=5, stride=2, padding=2, output_padding=1),
             nn.BatchNorm2d(8),
             nn.ReLU(),
-            nn.ConvTranspose2d(8, 1, kernel_size=10, stride=2, padding=4, output_padding=1),  # Output size: [8, 256, 256]
+            # Input size: [8, 128, 128], Output size after layer: [1, 256, 256]
+            nn.ConvTranspose2d(8, 1, kernel_size=5, stride=2, padding=2, output_padding=1),
             nn.Sigmoid()
         )
 
