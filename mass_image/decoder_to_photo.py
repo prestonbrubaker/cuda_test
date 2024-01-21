@@ -50,7 +50,7 @@ num_images = 50  # Number of images to generate
 for i in range(num_images):
     # Random input for the decoder
     # The dimensions here should match the output dimensions of your encoder
-    random_input = torch.randn(1, 16, 256, 256)  # Example dimensions
+    random_input = torch.randn(1, 4, 256, 256)  # Example dimensions
 
     # Run the decoder
     with torch.no_grad():
