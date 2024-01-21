@@ -75,10 +75,10 @@ class Autoencoder(nn.Module):
             nn.ConvTranspose2d(30, 64, kernel_size=5, stride=2, padding=2, output_padding=1),
             nn.BatchNorm2d(64),
             nn.ReLU(),
-            nn.Conv2d(64, 64, kernel_size=5, stride=2, padding=2),
+            nn.ConvTranspose2d(64, 64, kernel_size=5, stride=2, padding=2, output_padding=1),
             nn.BatchNorm2d(64),
             nn.ReLU(),
-            nn.Conv2d(64, 64, kernel_size=5, stride=2, padding=2),
+            nn.ConvTranspose2d(64, 64, kernel_size=5, stride=2, padding=2, output_padding=1),
             nn.BatchNorm2d(64),
             nn.ReLU(),
             nn.ConvTranspose2d(64, 32, kernel_size=5, stride=2, padding=2, output_padding=1),
@@ -88,7 +88,7 @@ class Autoencoder(nn.Module):
             nn.BatchNorm2d(16),
             nn.ReLU(),
             nn.ConvTranspose2d(16, 1, kernel_size=5, stride=2, padding=2, output_padding=1),
-            nn.Sigmoid()  # Using sigmoid for pixel value range [0, 1]
+            nn.Sigmoid()
         )
 
     def forward(self, x):
