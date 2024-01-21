@@ -117,11 +117,11 @@ USE_PREPROCESSED_DATASET = True  # Set to True to use preprocessed dataset
 if USE_PREPROCESSED_DATASET:
     dataset = TensorDataset(folder_path='tensor_database')
 else:
-    #dataset = MandelbrotDataset(folder_path='semi_synthetic_photos', transform=transform)
-    dataset = MandelbrotDataset(folder_path='photos', transform=transform)
+    dataset = MandelbrotDataset(folder_path='semi_synthetic_photos', transform=transform)
+    #dataset = MandelbrotDataset(folder_path='photos', transform=transform)
 
-#dataloader = DataLoader(dataset, batch_size=600, shuffle=True)
-dataloader = DataLoader(dataset, batch_size=len(dataset), shuffle=True)
+dataloader = DataLoader(dataset, batch_size=600, shuffle=True)
+#dataloader = DataLoader(dataset, batch_size=len(dataset), shuffle=True)
 
 
 # Instantiate VAE model
@@ -130,7 +130,8 @@ model = VariationalAutoencoder().to(device)
 
 # Loss and optimizer
 # For VAE, use the custom loss function that includes both BCE and KLD
-optimizer = optim.Adam(model.parameters(), lr=0.0001, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.01, amsgrad=True)
+#optimizer = optim.Adam(model.parameters(), lr=0.0001, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.01, amsgrad=True)
+optimizer = torch.optim.SGD(model.parameters(), lr=0.05, momentum=0.9)
 
 # Train the model
 num_epochs = 100000
