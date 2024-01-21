@@ -102,7 +102,7 @@ model = Autoencoder().to(device)
 
 # Loss and optimizer
 criterion = nn.MSELoss()
-optimizer = optim.Adam(model.parameters(), lr=0.0001)
+optimizer = optim.Adam(model.parameters(), lr=0.001)
 #optimizer = torch.optim.SGD(model.parameters(), lr=0.001, momentum=0.01)
 
 # Train the model
