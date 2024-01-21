@@ -30,7 +30,7 @@ def process_images(input_folder, output_folder, synthetic_multiplier):
         os.makedirs(output_folder)
 
     for filename in os.listdir(input_folder):
-        if filename.endswith('.jpg'):  # Adjust according to your image file type
+        if filename.endswith('.png'):  # Check for PNG files
             file_path = os.path.join(input_folder, filename)
             # Save original image
             original = Image.open(file_path)
@@ -38,7 +38,7 @@ def process_images(input_folder, output_folder, synthetic_multiplier):
             original.save(os.path.join(output_folder, filename))
             # Create augmented images
             for i in range(synthetic_multiplier):
-                save_path = os.path.join(output_folder, f'{os.path.splitext(filename)[0]}_synthetic{i}.jpg')
+                save_path = os.path.join(output_folder, f'{os.path.splitext(filename)[0]}_synthetic{i}.png')  # Save as PNG
                 transform_image(file_path, save_path)
 
 process_images('photos', 'semi_synthetic_photos', synthetic_multiplier=5)
