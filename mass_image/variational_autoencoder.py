@@ -8,7 +8,7 @@ import os
 import random
 
 # Global variable for the dimension of the latent space
-LATENT_DIM = 5  # You can change this number as needed
+LATENT_DIM = 5
 
 
 # Custom Dataset
