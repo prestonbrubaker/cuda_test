@@ -128,7 +128,7 @@ model = VariationalAutoencoder().to(device)
 
 # Loss and optimizer
 # For VAE, use the custom loss function that includes both BCE and KLD
-optimizer = optim.Adam(model.parameters(), lr=0.01, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.01, amsgrad=True)
+optimizer = optim.Adam(model.parameters(), lr=0.005, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.01, amsgrad=True)
 
 # Train the model
 num_epochs = 100000
