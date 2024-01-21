@@ -106,7 +106,7 @@ transform = transforms.Compose([
 ])
 dataset = MandelbrotDataset(folder_path='photos', transform=original_transform, 
                             augmentation_transform=augmentation_transform, augment_factor=augment_factor)
-dataloader = DataLoader(dataset, batch_size=128, shuffle=True)
+dataloader = DataLoader(dataset, batch_size=len(dataset), shuffle=True)
 
 # Instantiate model
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
