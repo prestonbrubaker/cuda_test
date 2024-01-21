@@ -56,10 +56,10 @@ class Autoencoder(nn.Module):
             nn.ReLU(),
             nn.Conv2d(16, 32, 3, stride=2, padding=1),
             nn.ReLU(),
-            nn.Conv2d(32, 3, 7) # Compressed to 32 feature maps
+            nn.Conv2d(32, 5, 7) # Compressed to 5 feature maps
         )
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(3, 32, 7),
+            nn.ConvTranspose2d(5, 32, 7),
             nn.ReLU(),
             nn.ConvTranspose2d(32, 16, 3, stride=2, padding=1, output_padding=1),
             nn.ReLU(),
