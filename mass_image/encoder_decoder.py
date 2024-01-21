@@ -7,32 +7,21 @@ from PIL import Image
 import os
 import random
 
-# Custom dataset with augmentation
+# Custom Dataset
 class MandelbrotDataset(Dataset):
-    def __init__(self, folder_path, transform=None, augmentation_transform=None, augment_factor=2):
+    def __init__(self, folder_path, transform=None):
         self.file_list = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
         self.folder_path = folder_path
         self.transform = transform
-        self.augmentation_transform = augmentation_transform
-        self.augment_factor = augment_factor
 
     def __len__(self):
-        return len(self.file_list) * (1 + self.augment_factor)
+        return len(self.file_list)
 
     def __getitem__(self, idx):
-        file_idx = idx // (1 + self.augment_factor)  # Determine the file index
-        img_path = os.path.join(self.folder_path, self.file_list[file_idx])
+        img_path = os.path.join(self.folder_path, self.file_list[idx])
         image = Image.open(img_path)
-
-        if idx % (1 + self.augment_factor) == 0:
-            # Original image
-            if self.transform:
-                image = self.transform(image)
-        else:
-            # Augmented image
-            if self.augmentation_transform:
-                image = self.augmentation_transform(image)
-
+        if self.transform:
+            image = self.transform(image)
         return image
 
 # Define transformations
@@ -80,16 +69,15 @@ class Autoencoder(nn.Module):
 
 # Load dataset
 
-augment_factor = 0  # Number of augmented images per original image
-
+# Define transformation
 transform = transforms.Compose([
     transforms.Grayscale(), 
     transforms.ToTensor()
 ])
-dataset = MandelbrotDataset(folder_path='photos', transform=original_transform, 
-                            augmentation_transform=augmentation_transform, augment_factor=augment_factor)
-dataloader = DataLoader(dataset, batch_size=len(dataset), shuffle=True)
-#dataloader = DataLoader(dataset, batch_size=400, shuffle=True)
+
+# Load dataset
+dataset = MandelbrotDataset(folder_path='photos', transform=transform)
+dataloader = DataLoader(dataset, batch_size=len(dataset), shuffle=True)  # Choose an appropriate batch size
 
 # Instantiate model
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
