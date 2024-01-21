@@ -3,9 +3,9 @@ import random
 from PIL import Image
 
 def transform_image(image_path, save_path):
-    image = Image.open(image_path)
+    image = Image.open(image_path).convert("RGB")  # Ensure image is in RGB mode
     # Random rotation between -90 and 90 degrees
-    rotated = image.rotate(random.uniform(-90, 90), expand=True, fillcolor=(0, 0, 0))
+    rotated = image.rotate(random.uniform(-90, 90), expand=True, fillcolor=(0,))  # Single-element tuple for grayscale
     # Random zoom between 80% and 120%
     zoom_factor = random.uniform(0.8, 1.2)
     width, height = rotated.size
