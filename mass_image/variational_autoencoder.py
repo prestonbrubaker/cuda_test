@@ -49,10 +49,10 @@ class VariationalAutoencoder(nn.Module):
 
         # Encoder
         self.encoder = nn.Sequential(
-            nn.Conv2d(1, 8, kernel_size=3, stride=2, padding=1),
-            nn.BatchNorm2d(8),
+            nn.Conv2d(1, 24, kernel_size=3, stride=2, padding=1),
+            nn.BatchNorm2d(24),
             nn.ReLU(),
-            nn.Conv2d(8, 8, kernel_size=3, stride=2, padding=1),
+            nn.Conv2d(24, 8, kernel_size=3, stride=2, padding=1),
             nn.BatchNorm2d(8),
             nn.ReLU()
         )
@@ -64,10 +64,10 @@ class VariationalAutoencoder(nn.Module):
         # Adjust the output features to match the input of the first transposed conv layer
         self.decoder_input = nn.Linear(in_features=LATENT_DIM, out_features=8*64*64)
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(8, 8, kernel_size=3, stride=2, padding=1, output_padding=1),
-            nn.BatchNorm2d(8),
+            nn.ConvTranspose2d(8, 24, kernel_size=3, stride=2, padding=1, output_padding=1),
+            nn.BatchNorm2d(24),
             nn.ReLU(),
-            nn.ConvTranspose2d(8, 1, kernel_size=3, stride=2, padding=1, output_padding=1),
+            nn.ConvTranspose2d(24, 1, kernel_size=3, stride=2, padding=1, output_padding=1),
             nn.Sigmoid()
         )
 
@@ -128,7 +128,7 @@ model = VariationalAutoencoder().to(device)
 
 # Loss and optimizer
 # For VAE, use the custom loss function that includes both BCE and KLD
-optimizer = optim.Adam(model.parameters(), lr=0.005, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.01, amsgrad=True)
+optimizer = optim.Adam(model.parameters(), lr=0.001, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.01, amsgrad=True)
 
 # Train the model
 num_epochs = 100000
