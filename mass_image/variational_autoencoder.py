@@ -118,10 +118,8 @@ if USE_PREPROCESSED_DATASET:
     dataset = TensorDataset(folder_path='tensor_database')
 else:
     dataset = MandelbrotDataset(folder_path='semi_synthetic_photos', transform=transform)
-    #dataset = MandelbrotDataset(folder_path='photos', transform=transform)
 
 dataloader = DataLoader(dataset, batch_size=600, shuffle=True)
-#dataloader = DataLoader(dataset, batch_size=len(dataset), shuffle=True)
 
 
 # Instantiate VAE model
