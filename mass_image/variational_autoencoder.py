@@ -151,8 +151,8 @@ for epoch in range(num_epochs):
             loss.backward()
             optimizer.step()
 
-        # Print loss after every sub-epoch iteration on a batch
-        print(f'Epoch [{epoch+1}/{num_epochs}], Sub-Epoch [{sub_epoch+1}/{num_sub_epochs}], Loss: {loss.item():.6f}')
+            # Print loss after every sub-epoch iteration on a batch
+            print(f'Epoch [{epoch+1}/{num_epochs}], Sub-Epoch [{sub_epoch+1}/{num_sub_epochs}], Loss: {loss.item():.6f}')
 
     if epoch % 25 == 0:
         # Save the model
