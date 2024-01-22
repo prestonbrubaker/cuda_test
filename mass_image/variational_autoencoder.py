@@ -133,35 +133,36 @@ optimizer = optim.Adam(model.parameters(), lr=0.0001, betas=(0.9, 0.999), eps=1e
 
 
 
-num_sub_epochs = 3
 num_epochs = 100000
 batch_size = 5
 
+# Create a DataLoader for the entire dataset
+dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
+
 for epoch in range(num_epochs):
-    # Shuffle the dataset for each epoch
-    dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
     batch_num = 0
     total_batches = len(dataloader)
 
+    # Iterate over each batch in the dataset
     for data in dataloader:
         batch_num += 1
+        img = data.to(device)
 
-        # Repeat training for each batch 'num_sub_epochs' times
-        for sub_epoch in range(num_sub_epochs):
-            img = data.to(device)
-            recon_batch, mu, log_var = model(img)
-            loss = loss_function(recon_batch, img, mu, log_var)
+        # Forward pass
+        recon_batch, mu, log_var = model(img)
+        loss = loss_function(recon_batch, img, mu, log_var)
 
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
+        # Backward pass and optimize
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
 
-            print(f'Epoch [{epoch+1}/{num_epochs}], Batch [{batch_num}/{total_batches}], Sub-Epoch [{sub_epoch+1}/{num_sub_epochs}], Batch Loss: {loss.item():.6f}')
+        print(f'Epoch [{epoch+1}/{num_epochs}], Batch [{batch_num}/{total_batches}], Loss: {loss.item():.6f}')
 
-        # Optionally, save the model after processing a certain number of batches
-        if batch_num % 100 == 0:
-            torch.save(model.state_dict(), f'variational_autoencoder_epoch_{epoch}_batch_{batch_num}.pth')
-            print(f"\nModel Saved after Batch {batch_num}")
+    # Optionally, save the model at the end of each epoch
+    if epoch % 25 == 0:
+        torch.save(model.state_dict(), f'variational_autoencoder_epoch_{epoch}.pth')
+        print(f"\nModel Saved after Epoch {epoch}")
 
 # Save the model
 torch.save(model.state_dict(), 'variational_autoencoder.pth')
