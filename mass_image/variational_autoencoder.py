@@ -109,6 +109,7 @@ transform = transforms.Compose([
     transforms.ToTensor()
 ])
 
+USE_PREPROCESSED_DATASET = True
 
 # Define the dataset
 if USE_PREPROCESSED_DATASET:
