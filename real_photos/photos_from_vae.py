@@ -5,7 +5,7 @@ import numpy as np
 from PIL import Image
 
 # Model Parameters
-latent_dim = 10  # Example latent space dimension
+latent_dim = 30  # Example latent space dimension
 LATENT_DIM = latent_dim
 
 class VariationalAutoencoder(nn.Module):
