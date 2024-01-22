@@ -124,8 +124,17 @@ num_epochs = 100000
 for epoch in range(num_epochs):
     for data in dataloader:
         img = data.to(device)
+
+        # Forward pass
         recon_batch, mu, log_var = model(img)
+
+        # Clamp the output of the model to ensure it's within [0, 1]
+        recon_batch = torch.clamp(recon_batch, 0, 1)
+
+        # Calculate loss
         loss = loss_function(recon_batch, img, mu, log_var)
+
+        # Backward pass and optimize
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
