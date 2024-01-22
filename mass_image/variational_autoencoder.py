@@ -140,7 +140,13 @@ for epoch in range(num_epochs):
         img = data.to(device)
         # Forward pass
         recon_batch, mu, log_var = model(img)
-
+    
+        # Clamping recon_batch values
+        recon_batch = torch.clamp(recon_batch, 0, 1)
+    
+        # Checking if any values are outside [0, 1]
+        if (recon_batch < 0).any() or (recon_batch > 1).any():
+            print("Values outside [0, 1] detected")
         
         loss = loss_function(recon_batch, img, mu, log_var)
         
