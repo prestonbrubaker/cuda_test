@@ -137,31 +137,27 @@ num_sub_epochs = 10
 num_epochs = 100000
 batch_size = 5
 
-
 for epoch in range(num_epochs):
-    # Shuffle the dataset at the beginning of each epoch
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
-    data_num = 0
+    batch_num = 0
+    total_batches = len(dataloader)
+    
     for data in dataloader:
-        data_num += 1
+        batch_num += 1
         for sub_epoch in range(num_sub_epochs):
             img = data.to(device)
-            # Forward pass
             recon_batch, mu, log_var = model(img)
             loss = loss_function(recon_batch, img, mu, log_var)
 
-            # Backward pass and optimize
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
 
-            # Print loss after every sub-epoch iteration on a batch
-            print(f'Epoch [{epoch+1}/{num_epochs}], Data [{data_num}/{batch_size}] Sub-Epoch [{sub_epoch+1}/{num_sub_epochs}], Batch Loss: {loss.item():.6f}')
+            print(f'Epoch [{epoch+1}/{num_epochs}], Batch [{batch_num}/{total_batches}], Sub-Epoch [{sub_epoch+1}/{num_sub_epochs}], Batch Loss: {loss.item():.6f}')
 
-    if epoch % 1 == 0:
-        # Save the model
-        torch.save(model.state_dict(), 'variational_autoencoder.pth')
-        print("Model Saved")
+    if epoch % 25 == 0:
+        torch.save(model.state_dict(), f'variational_autoencoder_epoch_{epoch}.pth')
+        print(f"Model Saved at Epoch {epoch}")
 
 # Save the model
 torch.save(model.state_dict(), 'variational_autoencoder.pth')
