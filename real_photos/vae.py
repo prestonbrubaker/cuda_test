@@ -7,12 +7,18 @@ from PIL import Image
 import os
 import random
 
-# Global variable for the dimension of the latent space
-LATENT_DIM = 12
+# Model Parameters
+latent_dim = 100  # Example latent space dimension
+
+# Instantiate the model
+model = VariationalAutoencoder(latent_dim).to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
+
+# Optimizer
+optimizer = optim.Adam(model.parameters(), lr=0.001)
 
 
 # Custom Dataset
-class MandelbrotDataset(Dataset):
+class CustomDataset(Dataset):
     def __init__(self, folder_path, transform=None):
         self.file_list = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
         self.folder_path = folder_path
@@ -23,51 +29,43 @@ class MandelbrotDataset(Dataset):
 
     def __getitem__(self, idx):
         img_path = os.path.join(self.folder_path, self.file_list[idx])
-        image = Image.open(img_path)
+        image = Image.open(img_path).convert('L')  # Convert to grayscale
         if self.transform:
             image = self.transform(image)
         return image
 
-class TensorDataset(Dataset):
-    def __init__(self, folder_path):
-        self.file_list = [f for f in os.listdir(folder_path) if f.endswith('.pt')]
-        self.folder_path = folder_path
 
-    def __len__(self):
-        return len(self.file_list)
-
-    def __getitem__(self, idx):
-        tensor_path = os.path.join(self.folder_path, self.file_list[idx])
-        tensor = torch.load(tensor_path)
-        return tensor
-
-
-# Variational Autoencoder model
 class VariationalAutoencoder(nn.Module):
-    def __init__(self):
+    def __init__(self, latent_dim):
         super(VariationalAutoencoder, self).__init__()
+        self.latent_dim = latent_dim
 
         # Encoder
         self.encoder = nn.Sequential(
-            nn.Conv2d(1, 24, kernel_size=3, stride=2, padding=1),
-            nn.BatchNorm2d(24),
+            nn.Conv2d(1, 32, kernel_size=4, stride=2, padding=1), # 64x48
             nn.ReLU(),
-            nn.Conv2d(24, 24, kernel_size=3, stride=2, padding=1),
-            nn.BatchNorm2d(24),
+            nn.Conv2d(32, 64, kernel_size=4, stride=2, padding=1), # 32x24
+            nn.ReLU(),
+            nn.Conv2d(64, 128, kernel_size=4, stride=2, padding=1), # 16x12
+            nn.ReLU(),
+            nn.Conv2d(128, 256, kernel_size=4, stride=2, padding=1), # 8x6
             nn.ReLU()
         )
-        # Adjust the input features of the following layers based on the encoder output
-        self.fc_mu = nn.Linear(in_features=24*64*64, out_features=LATENT_DIM)
-        self.fc_log_var = nn.Linear(in_features=24*64*64, out_features=LATENT_DIM)
+
+        self.fc_mu = nn.Linear(256 * 8 * 6, latent_dim)
+        self.fc_log_var = nn.Linear(256 * 8 * 6, latent_dim)
 
         # Decoder
-        # Adjust the output features to match the input of the first transposed conv layer
-        self.decoder_input = nn.Linear(in_features=LATENT_DIM, out_features=24*64*64)
+        self.decoder_input = nn.Linear(latent_dim, 256 * 8 * 6)
+
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(24, 24, kernel_size=3, stride=2, padding=1, output_padding=1),
-            nn.BatchNorm2d(24),
+            nn.ConvTranspose2d(256, 128, kernel_size=4, stride=2, padding=1),
             nn.ReLU(),
-            nn.ConvTranspose2d(24, 1, kernel_size=3, stride=2, padding=1, output_padding=1),
+            nn.ConvTranspose2d(128, 64, kernel_size=4, stride=2, padding=1),
+            nn.ReLU(),
+            nn.ConvTranspose2d(64, 32, kernel_size=4, stride=2, padding=1),
+            nn.ReLU(),
+            nn.ConvTranspose2d(32, 1, kernel_size=4, stride=2, padding=1),
             nn.Sigmoid()
         )
 
@@ -85,16 +83,15 @@ class VariationalAutoencoder(nn.Module):
 
     def decode(self, z):
         x = self.decoder_input(z)
-        x = x.view(-1, 24, 64, 64)
-        x = self.decoder(x)
-        return x
+        x = x.view(-1, 256, 8, 6)
+        return self.decoder(x)
 
     def forward(self, x):
         mu, log_var = self.encode(x)
         z = self.reparameterize(mu, log_var)
         return self.decode(z), mu, log_var
 
-# Loss function
+
 def loss_function(recon_x, x, mu, log_var):
     BCE = nn.functional.binary_cross_entropy(recon_x, x, reduction='sum')
     KLD = -0.5 * torch.sum(1 + log_var - mu.pow(2) - log_var.exp())
@@ -105,8 +102,10 @@ def loss_function(recon_x, x, mu, log_var):
 
 # Define transformation
 transform = transforms.Compose([
+    transforms.Resize((128, 96)),  # Resize to a smaller size
     transforms.Grayscale(), 
-    transforms.ToTensor()
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.5], std=[0.5])  # Assuming grayscale images
 ])
 
 # Global variable to choose which dataset to use
@@ -114,11 +113,12 @@ USE_PREPROCESSED_DATASET = False  # Set to True to use preprocessed dataset
 
 # Then, in your main script where you load the dataset:
 if USE_PREPROCESSED_DATASET:
-    dataset = TensorDataset(folder_path='tensor_database')
+    dataset = MandelbrotDataset(folder_path='photos', transform=transform)
+
 else:
     dataset = MandelbrotDataset(folder_path='photos', transform=transform)
 
-dataloader = DataLoader(dataset, batch_size=600, shuffle=True)
+dataloader = DataLoader(dataset, batch_size=60, shuffle=True)
 
 
 # Instantiate VAE model
