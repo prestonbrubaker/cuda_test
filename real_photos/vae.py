@@ -19,30 +19,30 @@ class VariationalAutoencoder(nn.Module):
 
         # Encoder
         self.encoder = nn.Sequential(
-            nn.Conv2d(1, 16, kernel_size=4, stride=2, padding=1), # 320x240
+            nn.Conv2d(1, 32, kernel_size=4, stride=2, padding=1), # 320x240
             nn.ReLU(),
-            nn.Conv2d(16, 16, kernel_size=4, stride=2, padding=1), # 160x120
+            nn.Conv2d(32, 32, kernel_size=4, stride=2, padding=1), # 160x120
             nn.ReLU(),
-            nn.Conv2d(16, 16, kernel_size=4, stride=2, padding=1), # 80x60
+            nn.Conv2d(32, 32, kernel_size=4, stride=2, padding=1), # 80x60
             nn.ReLU(),
-            nn.Conv2d(16, 16, kernel_size=4, stride=2, padding=1), # 40x30
+            nn.Conv2d(32, 32, kernel_size=4, stride=2, padding=1), # 40x30
             nn.ReLU()
         )
 
-        self.fc_mu = nn.Linear(16 * 40 * 30, latent_dim)
-        self.fc_log_var = nn.Linear(16 * 40 * 30, latent_dim)
+        self.fc_mu = nn.Linear(32 * 40 * 30, latent_dim)
+        self.fc_log_var = nn.Linear(32 * 40 * 30, latent_dim)
 
         # Decoder
-        self.decoder_input = nn.Linear(latent_dim, 16 * 40 * 30)
+        self.decoder_input = nn.Linear(latent_dim, 32 * 40 * 30)
 
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(16, 16, kernel_size=4, stride=2, padding=1), # 80x60
+            nn.ConvTranspose2d(32, 32, kernel_size=4, stride=2, padding=1), # 80x60
             nn.ReLU(),
-            nn.ConvTranspose2d(16, 16, kernel_size=4, stride=2, padding=1), # 160x120
+            nn.ConvTranspose2d(32, 32, kernel_size=4, stride=2, padding=1), # 160x120
             nn.ReLU(),
-            nn.ConvTranspose2d(16, 16, kernel_size=4, stride=2, padding=1), # 320x240
+            nn.ConvTranspose2d(32, 32, kernel_size=4, stride=2, padding=1), # 320x240
             nn.ReLU(),
-            nn.ConvTranspose2d(16, 1, kernel_size=4, stride=2, padding=1), # 640x480
+            nn.ConvTranspose2d(32, 1, kernel_size=4, stride=2, padding=1), # 640x480
             nn.Sigmoid()
         )
 
@@ -60,7 +60,7 @@ class VariationalAutoencoder(nn.Module):
 
     def decode(self, z):
         x = self.decoder_input(z)
-        x = x.view(-1, 16, 40, 30)
+        x = x.view(-1, 32, 40, 30)
         return self.decoder(x)
 
     def forward(self, x):
