@@ -5,6 +5,8 @@ from torch.utils.data import DataLoader, Dataset
 from torchvision import transforms
 from PIL import Image
 import os
+os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
+
 
 # Model Parameters
 latent_dim = 10  # Example latent space dimension
