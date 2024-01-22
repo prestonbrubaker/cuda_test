@@ -8,6 +8,7 @@ import os
 
 # Model Parameters
 latent_dim = 100  # Example latent space dimension
+LATENT_DIM = latent_dim
 
 class VariationalAutoencoder(nn.Module):
     def __init__(self, latent_dim):
