@@ -100,11 +100,7 @@ class CustomDataset(Dataset):
 transform = transforms.Compose([
     transforms.Resize((640, 480)),
     transforms.Grayscale(),  # Convert to grayscale if needed
-    transforms.ColorJitter(brightness=0.5, contrast=0.5, saturation=0.5, hue=0.5),
-    transforms.RandomHorizontalFlip(),  # Data augmentation
-    transforms.RandomRotation(10),  # Random rotation between -10 to 10 degrees
     transforms.ToTensor(),
-    transforms.Normalize(mean=[0.5], std=[0.5])  # Adjust normalization if needed
 ])
 
 
@@ -119,7 +115,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = VariationalAutoencoder(latent_dim=LATENT_DIM).to(device)
 
 # Loss and optimizer
-optimizer = optim.Adam(model.parameters(), lr=0.000000001, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.00, amsgrad=False)
+optimizer = optim.Adam(model.parameters(), lr=0.001, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.00, amsgrad=False)
 
 # Train the model
 num_epochs = 100000
