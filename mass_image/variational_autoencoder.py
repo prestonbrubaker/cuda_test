@@ -130,27 +130,35 @@ model = VariationalAutoencoder().to(device)
 # For VAE, use the custom loss function that includes both BCE and KLD
 optimizer = optim.Adam(model.parameters(), lr=0.0001, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.00, amsgrad=True)
 
+
+
+
+# Number of sub-epochs
+num_sub_epochs = 5
+
 # Train the model
 num_epochs = 100000
 for epoch in range(num_epochs):
     for data in dataloader:
-        img = data.to(device)
-        # Forward pass
-        recon_batch, mu, log_var = model(img)
+        for sub_epoch in range(num_sub_epochs):
+            img = data.to(device)
+            # Forward pass
+            recon_batch, mu, log_var = model(img)
+            loss = loss_function(recon_batch, img, mu, log_var)
 
-        
-        loss = loss_function(recon_batch, img, mu, log_var)
-        
-        # Backward pass and optimize
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-    
-    print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.6f}')
-    if(epoch % 25 == 0):
+            # Backward pass and optimize
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+        # Print loss after every sub-epoch iteration on a batch
+        print(f'Epoch [{epoch+1}/{num_epochs}], Sub-Epoch [{sub_epoch+1}/{num_sub_epochs}], Loss: {loss.item():.6f}')
+
+    if epoch % 25 == 0:
         # Save the model
         torch.save(model.state_dict(), 'variational_autoencoder.pth')
         print("Model Saved")
+
 
 # Save the model
 torch.save(model.state_dict(), 'variational_autoencoder.pth')
