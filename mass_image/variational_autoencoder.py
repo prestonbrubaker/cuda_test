@@ -118,7 +118,7 @@ if USE_PREPROCESSED_DATASET:
 else:
     dataset = MandelbrotDataset(folder_path='semi_synthetic_photos', transform=transform)
 
-dataloader = DataLoader(dataset, batch_size=600, shuffle=True)
+dataloader = DataLoader(dataset, batch_size=60, shuffle=True)
 
 
 # Instantiate VAE model
