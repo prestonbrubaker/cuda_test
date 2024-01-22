@@ -133,7 +133,7 @@ optimizer = optim.Adam(model.parameters(), lr=0.0001, betas=(0.9, 0.999), eps=1e
 
 
 
-num_sub_epochs = 5
+num_sub_epochs = 50
 num_epochs = 100000
 batch_size = 600
 
