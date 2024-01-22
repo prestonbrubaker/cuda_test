@@ -9,7 +9,7 @@ os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
 
 
 # Model Parameters
-latent_dim = 5  # Example latent space dimension
+latent_dim = 16  # Example latent space dimension
 LATENT_DIM = latent_dim
 
 class VariationalAutoencoder(nn.Module):
