@@ -110,50 +110,44 @@ transform = transforms.Compose([
 ])
 
 
-# Global variable to choose which dataset to use
-USE_PREPROCESSED_DATASET = True  # Set to True to use preprocessed dataset
-
-# Then, in your main script where you load the dataset:
+# Define the dataset
 if USE_PREPROCESSED_DATASET:
     dataset = TensorDataset(folder_path='tensor_database')
 else:
     dataset = MandelbrotDataset(folder_path='semi_synthetic_photos', transform=transform)
-
-dataloader = DataLoader(dataset, batch_size=600, shuffle=True)
-
 
 # Instantiate VAE model
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = VariationalAutoencoder().to(device)
 
 # Loss and optimizer
-# For VAE, use the custom loss function that includes both BCE and KLD
 optimizer = optim.Adam(model.parameters(), lr=0.0001, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.00, amsgrad=True)
-
-
-
 
 # Train the model
 num_epochs = 100000
+batch_size = 100
+
 for epoch in range(num_epochs):
+    # Reload and shuffle data every 10 epochs
+    if epoch % 10 == 0:
+        dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
+
     for data in dataloader:
         img = data.to(device)
         # Forward pass
         recon_batch, mu, log_var = model(img)
-
-        
         loss = loss_function(recon_batch, img, mu, log_var)
-        
+
         # Backward pass and optimize
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-    
+
     print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.6f}')
-    if(epoch % 25 == 0):
+    if epoch % 25 == 0:
         # Save the model
-        torch.save(model.state_dict(), 'variational_autoencoder.pth')
-        print("Model Saved")
+        torch.save(model.state_dict(), f'variational_autoencoder_epoch_{epoch}.pth')
+        print("Model Saved at Epoch", epoch)
 
 # Save the model
 torch.save(model.state_dict(), 'variational_autoencoder.pth')
