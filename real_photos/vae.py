@@ -94,13 +94,17 @@ class CustomDataset(Dataset):
 
 # Load dataset
 
-# Define transformation
+
 transform = transforms.Compose([
     transforms.Resize((640, 480)),
-    transforms.Grayscale(), 
+    transforms.Grayscale(),  # Convert to grayscale if needed
+    transforms.ColorJitter(brightness=0.5, contrast=0.5, saturation=0.5, hue=0.5),
+    transforms.RandomHorizontalFlip(),  # Data augmentation
+    transforms.RandomRotation(10),  # Random rotation between -10 to 10 degrees
     transforms.ToTensor(),
-    transforms.Normalize(mean=[0.5], std=[0.5])
+    transforms.Normalize(mean=[0.5], std=[0.5])  # Adjust normalization if needed
 ])
+
 
 # Instantiate the dataset
 dataset = CustomDataset(folder_path='photos', transform=transform)
