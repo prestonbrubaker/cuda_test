@@ -110,7 +110,7 @@ transform = transforms.Compose([
 ])
 
 # Global variable to choose which dataset to use
-USE_PREPROCESSED_DATASET = True  # Set to True to use preprocessed dataset
+USE_PREPROCESSED_DATASET = False  # Set to True to use preprocessed dataset
 
 # Then, in your main script where you load the dataset:
 if USE_PREPROCESSED_DATASET:
@@ -127,8 +127,8 @@ model = VariationalAutoencoder().to(device)
 
 # Loss and optimizer
 # For VAE, use the custom loss function that includes both BCE and KLD
-#optimizer = optim.Adam(model.parameters(), lr=0.00001, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.00, amsgrad=True)
-optimizer = optim.SGD(model.parameters(), lr=0.00000001, momentum=0.9)
+optimizer = optim.Adam(model.parameters(), lr=0.00001, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.00, amsgrad=True)
+#optimizer = optim.SGD(model.parameters(), lr=0.00000001, momentum=0.9)
 
 
 
