@@ -135,14 +135,15 @@ optimizer = optim.Adam(model.parameters(), lr=0.0001, betas=(0.9, 0.999), eps=1e
 
 num_sub_epochs = 50
 num_epochs = 100000
-batch_size = 600
+batch_size = 60
 
 
 for epoch in range(num_epochs):
     # Shuffle the dataset at the beginning of each epoch
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
-
+    data_num = 0
     for data in dataloader:
+        data_num += 1
         for sub_epoch in range(num_sub_epochs):
             img = data.to(device)
             # Forward pass
@@ -155,9 +156,9 @@ for epoch in range(num_epochs):
             optimizer.step()
 
             # Print loss after every sub-epoch iteration on a batch
-            print(f'Epoch [{epoch+1}/{num_epochs}], Sub-Epoch [{sub_epoch+1}/{num_sub_epochs}], Batch Loss: {loss.item():.6f}')
+            print(f'Epoch [{epoch+1}/{num_epochs}], Data [{data_num}/{batch_size}] Sub-Epoch [{sub_epoch+1}/{num_sub_epochs}], Batch Loss: {loss.item():.6f}')
 
-    if epoch % 25 == 0:
+    if epoch % 1 == 0:
         # Save the model
         torch.save(model.state_dict(), 'variational_autoencoder.pth')
         print("Model Saved")
