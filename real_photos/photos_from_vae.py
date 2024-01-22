@@ -4,36 +4,40 @@ import torch.nn as nn
 import numpy as np
 from PIL import Image
 
-# Global variable for the dimension of the latent space
-LATENT_DIM = 12
+# Model Parameters
+latent_dim = 100  # Example latent space dimension
 
-
-# Variational Autoencoder model
 class VariationalAutoencoder(nn.Module):
-    def __init__(self):
+    def __init__(self, latent_dim):
         super(VariationalAutoencoder, self).__init__()
+        self.latent_dim = latent_dim
 
         # Encoder
         self.encoder = nn.Sequential(
-            nn.Conv2d(1, 24, kernel_size=3, stride=2, padding=1),
-            nn.BatchNorm2d(24),
+            nn.Conv2d(1, 32, kernel_size=4, stride=2, padding=1), # 320x240
             nn.ReLU(),
-            nn.Conv2d(24, 24, kernel_size=3, stride=2, padding=1),
-            nn.BatchNorm2d(24),
+            nn.Conv2d(32, 64, kernel_size=4, stride=2, padding=1), # 160x120
+            nn.ReLU(),
+            nn.Conv2d(64, 128, kernel_size=4, stride=2, padding=1), # 80x60
+            nn.ReLU(),
+            nn.Conv2d(128, 256, kernel_size=4, stride=2, padding=1), # 40x30
             nn.ReLU()
         )
-        # Adjust the input features of the following layers based on the encoder output
-        self.fc_mu = nn.Linear(in_features=24*64*64, out_features=LATENT_DIM)
-        self.fc_log_var = nn.Linear(in_features=24*64*64, out_features=LATENT_DIM)
+
+        self.fc_mu = nn.Linear(256 * 40 * 30, latent_dim)
+        self.fc_log_var = nn.Linear(256 * 40 * 30, latent_dim)
 
         # Decoder
-        # Adjust the output features to match the input of the first transposed conv layer
-        self.decoder_input = nn.Linear(in_features=LATENT_DIM, out_features=24*64*64)
+        self.decoder_input = nn.Linear(latent_dim, 256 * 40 * 30)
+
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(24, 24, kernel_size=3, stride=2, padding=1, output_padding=1),
-            nn.BatchNorm2d(24),
+            nn.ConvTranspose2d(256, 128, kernel_size=4, stride=2, padding=1), # 80x60
             nn.ReLU(),
-            nn.ConvTranspose2d(24, 1, kernel_size=3, stride=2, padding=1, output_padding=1),
+            nn.ConvTranspose2d(128, 64, kernel_size=4, stride=2, padding=1), # 160x120
+            nn.ReLU(),
+            nn.ConvTranspose2d(64, 32, kernel_size=4, stride=2, padding=1), # 320x240
+            nn.ReLU(),
+            nn.ConvTranspose2d(32, 1, kernel_size=4, stride=2, padding=1), # 640x480
             nn.Sigmoid()
         )
 
@@ -51,9 +55,8 @@ class VariationalAutoencoder(nn.Module):
 
     def decode(self, z):
         x = self.decoder_input(z)
-        x = x.view(-1, 24, 64, 64)
-        x = self.decoder(x)
-        return x
+        x = x.view(-1, 256, 40, 30)
+        return self.decoder(x)
 
     def forward(self, x):
         mu, log_var = self.encode(x)
@@ -62,7 +65,7 @@ class VariationalAutoencoder(nn.Module):
 
 
 # Load the trained model
-model = VariationalAutoencoder()
+model = VariationalAutoencoder(LATENT_DIM)
 model.load_state_dict(torch.load('variational_autoencoder.pth'))
 model.eval()
 
@@ -75,7 +78,6 @@ for i in range(num_images):
     # Generate random latent vectors
     random_latent_vector = torch.randn(1, LATENT_DIM)
 
-
     # Decode the random latent vectors
     with torch.no_grad():
         generated_image = model.decode(random_latent_vector).cpu()
@@ -84,7 +86,9 @@ for i in range(num_images):
     generated_image = generated_image.squeeze().numpy()  # Remove batch and channel dimensions
     generated_image = (generated_image * 255).astype(np.uint8)  # Convert to 8-bit pixel values
     image = Image.fromarray(generated_image, 'L')
-    image = image.resize((256, 256), Image.ANTIALIAS)
+
+    # Resize image to 640x480 before saving
+    image = image.resize((640, 480), Image.ANTIALIAS)
     image.save(f'decoded_photos/decoded_vae_image_{i+1}.png')
 
 print(f'{num_images} images saved in decoded_photos folder')
