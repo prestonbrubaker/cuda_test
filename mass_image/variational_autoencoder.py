@@ -133,35 +133,30 @@ optimizer = optim.Adam(model.parameters(), lr=0.0001, betas=(0.9, 0.999), eps=1e
 
 
 
+# Number of sub-epochs
+num_sub_epochs = 5
+
+# Train the model
 num_epochs = 100000
-dataset_size = 600  # Number of data points per epoch
-
 for epoch in range(num_epochs):
-    # Randomly sample 600 indices from the dataset
-    indices = torch.randperm(len(dataset))[:dataset_size]
-    subset = Subset(dataset, indices)
-
-    # Create a DataLoader for this subset
-    dataloader = DataLoader(subset, batch_size=dataset_size, shuffle=True)
-
-    # There will only be one "batch" per epoch since the DataLoader encompasses 600 items
     for data in dataloader:
-        img = data.to(device)
-        
-        # Forward pass
-        recon_batch, mu, log_var = model(img)
-        loss = loss_function(recon_batch, img, mu, log_var)
-        
-        # Backward pass and optimize
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-        
-    print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.6f}')
-    
+        for sub_epoch in range(num_sub_epochs):
+            img = data.to(device)
+            # Forward pass
+            recon_batch, mu, log_var = model(img)
+            loss = loss_function(recon_batch, img, mu, log_var)
+
+            # Backward pass and optimize
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+        # Print loss after every sub-epoch iteration on a batch
+        print(f'Epoch [{epoch+1}/{num_epochs}], Sub-Epoch [{sub_epoch+1}/{num_sub_epochs}], Loss: {loss.item():.6f}')
+
     if epoch % 25 == 0:
-        # Save the model periodically
-        torch.save(model.state_dict(), f'variational_autoencoder_epoch_{epoch}.pth')
+        # Save the model
+        torch.save(model.state_dict(), 'variational_autoencoder.pth')
         print("Model Saved")
 
 # Save the model
