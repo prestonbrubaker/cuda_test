@@ -138,8 +138,12 @@ num_epochs = 100000
 for epoch in range(num_epochs):
     for data in dataloader:
         img = data.to(device)
-        
-        loss = loss_function(img, mu, log_var)
+
+        # Forward pass
+        recon_batch, mu, log_var = model(img)
+
+        # Calculate loss
+        loss = loss_function(recon_batch, img, mu, log_var)
         
         # Backward pass and optimize
         optimizer.zero_grad()
