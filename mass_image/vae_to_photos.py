@@ -5,7 +5,7 @@ import numpy as np
 from PIL import Image
 
 # Global variable for the dimension of the latent space
-LATENT_DIM = 7
+LATENT_DIM = 12
 
 
 # Variational Autoencoder model
@@ -18,19 +18,19 @@ class VariationalAutoencoder(nn.Module):
             nn.Conv2d(1, 24, kernel_size=3, stride=2, padding=1),
             nn.BatchNorm2d(24),
             nn.ReLU(),
-            nn.Conv2d(24, 8, kernel_size=3, stride=2, padding=1),
-            nn.BatchNorm2d(8),
+            nn.Conv2d(24, 24, kernel_size=3, stride=2, padding=1),
+            nn.BatchNorm2d(24),
             nn.ReLU()
         )
         # Adjust the input features of the following layers based on the encoder output
-        self.fc_mu = nn.Linear(in_features=8*64*64, out_features=LATENT_DIM)
-        self.fc_log_var = nn.Linear(in_features=8*64*64, out_features=LATENT_DIM)
+        self.fc_mu = nn.Linear(in_features=24*64*64, out_features=LATENT_DIM)
+        self.fc_log_var = nn.Linear(in_features=24*64*64, out_features=LATENT_DIM)
 
         # Decoder
         # Adjust the output features to match the input of the first transposed conv layer
-        self.decoder_input = nn.Linear(in_features=LATENT_DIM, out_features=8*64*64)
+        self.decoder_input = nn.Linear(in_features=LATENT_DIM, out_features=24*64*64)
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(8, 24, kernel_size=3, stride=2, padding=1, output_padding=1),
+            nn.ConvTranspose2d(24, 24, kernel_size=3, stride=2, padding=1, output_padding=1),
             nn.BatchNorm2d(24),
             nn.ReLU(),
             nn.ConvTranspose2d(24, 1, kernel_size=3, stride=2, padding=1, output_padding=1),
@@ -51,7 +51,7 @@ class VariationalAutoencoder(nn.Module):
 
     def decode(self, z):
         x = self.decoder_input(z)
-        x = x.view(-1, 8, 64, 64)
+        x = x.view(-1, 24, 64, 64)
         x = self.decoder(x)
         return x
 
