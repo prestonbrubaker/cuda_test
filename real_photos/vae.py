@@ -115,7 +115,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = VariationalAutoencoder(latent_dim=LATENT_DIM).to(device)
 
 # Loss and optimizer
-optimizer = optim.Adam(model.parameters(), lr=0.00003, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.00, amsgrad=False)
+optimizer = optim.Adam(model.parameters(), lr=0.000003, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.00, amsgrad=False)
 
 # Train the model
 num_epochs = 100000
